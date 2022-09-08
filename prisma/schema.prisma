@@ -22,5 +22,6 @@ model Product{
 model ProductImage{
   id String @default(cuid()) @id
   filename String
-  product Product  @relation(fields: [filename], references: [id])
+  productId String
+  product Product  @relation(fields: [productId], references: [id])
 }
