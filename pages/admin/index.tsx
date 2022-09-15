@@ -1,8 +1,6 @@
-import { signOut, useSession } from 'next-auth/react';
-export default function AdminPage(){
-    const { data: session, status } = useSession();
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 
-    return(
-        <h1>Hello {session?.user?.name}</h1>
-    )
-}
+export default withPageAuthRequired(function AdminPage({ user }) {
+    console.log(user)
+    return <div>Hello {user.name}</div>;
+  });

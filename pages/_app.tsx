@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { createTheme, ThemeProvider } from '@mui/material'
-import {SessionProvider} from 'next-auth/react'
+import { UserProvider } from '@auth0/nextjs-auth0';
 
 const theme = createTheme({
   typography: {
@@ -18,11 +18,11 @@ const theme = createTheme({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
-    <SessionProvider session={pageProps.session}>
+    <UserProvider>
       <ThemeProvider theme={theme}>
           <Component {...pageProps} />
         </ThemeProvider>
-    </SessionProvider>
+    </UserProvider>
     </>
     )
 }
