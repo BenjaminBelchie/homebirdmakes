@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { NextPage, InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import {
   Box,
   Typography,
@@ -10,6 +10,25 @@ import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import ImageButton from '../components/ImageButton';
+import axios from 'axios';
+
+export const getServerSideProps: GetServerSideProps = async(context) =>{
+  let etsyListings = null;
+  axios.get('https://api.etsy.com/v3/application/openapi-ping',{
+    headers: {
+      'x-api-key': process.env.ETSY_API_KEY!
+    }
+  }).then(response => {
+    console.log(response)
+    etsyListings = response.data;
+  }).catch(error => {
+    console.log(error);
+  })
+
+  return{
+    props:{etsyListings}
+  }
+}
 
 const testData = [
   {
@@ -38,7 +57,7 @@ const testData = [
   }
 ]
 
-const Home: NextPage = (props) => {
+const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
       {/* Top logo and icons */}
