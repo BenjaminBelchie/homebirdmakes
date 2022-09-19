@@ -11,6 +11,7 @@ import {
   InputLabel,
   FormControl,
   Menu,
+  TextField,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -70,9 +71,20 @@ const testData = [
 const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [searchAnchorEl, setSearchAnchorEl] = React.useState<null | HTMLElement>(null);
   const shopMenuOpen = Boolean(anchorEl);
+  const searchMenuOpen = Boolean(searchAnchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const openSearch = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setSearchAnchorEl(event.currentTarget);
+  };
+
+  const closeSearch = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setSearchAnchorEl(null);
   };
   const handleShopMenuClose = () => {
     setAnchorEl(null);
@@ -86,9 +98,22 @@ const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideP
     <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
       {/* Top logo and icons */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{width: '100%', margin:4}}>
-        <IconButton sx={{marginLeft:4, height:"fit-content"}}>
+        <IconButton 
+          sx={{marginLeft:4, height:"fit-content"}}
+          onClick={openSearch}>
           <SearchIcon/>
         </IconButton>
+          <Menu
+              id="basic-menu"
+              anchorEl={searchAnchorEl}
+              open={searchMenuOpen}
+              onClose={closeSearch}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem><Stack direction="row"><TextField variant="standard" label="Search Products"/><Button variant="contained" size="small">Search</Button></Stack></MenuItem>
+            </Menu>
         <IconButton onClick={() => {router.push("/")}} sx={{padding:0}}>
           <Box component="img" src="/images/homebirdmakes_logo.png"  sx={{height: "250px"}}/>
         </IconButton>
