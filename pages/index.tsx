@@ -11,24 +11,26 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import ImageButton from '../components/ImageButton';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import InstagramFeed from '../components/InstagramFeed';
 
 export const getServerSideProps: GetServerSideProps = async(context) =>{
-  let etsyListings = null;
-  axios.get('https://api.etsy.com/v3/application/openapi-ping',{
-    headers: {
-      'x-api-key': process.env.ETSY_API_KEY!
+  // let etsyListings = null;
+  // axios.get('https://api.etsy.com/v3/application/openapi-ping',{
+  //   headers: {
+  //     'x-api-key': process.env.ETSY_API_KEY!
+  //   }
+  // }).then(response => {
+  //   console.log(response)
+  //   etsyListings = response.data;
+  // }).catch(error => {
+  //   console.log(error);
+  // })
+    
+    return{
+      props:{null: null}
     }
-  }).then(response => {
-    console.log(response)
-    etsyListings = response.data;
-  }).catch(error => {
-    console.log(error);
-  })
-
-  return{
-    props:{etsyListings}
   }
-}
 
 const testData = [
   {
@@ -58,6 +60,7 @@ const testData = [
 ]
 
 const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  
   return (
     <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
       {/* Top logo and icons */}
@@ -80,9 +83,8 @@ const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideP
       </Stack>
 
       <Typography variant="body1" sx={{marginTop:8}}>Collections</Typography>
-      <ImageList sx={{ width: "80%", height:800, margin:4 }} cols={3} rowHeight={250}>
-        {testData.map(item => <ImageButton image={item.image} category={item.category}/>)}
-      </ImageList>
+      
+      <InstagramFeed />
       
       
     </Box>
