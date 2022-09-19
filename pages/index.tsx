@@ -132,6 +132,7 @@ const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideP
       <ImageList sx={{ width: "80%", height:800, margin:4 }} cols={3} rowHeight={250}>
         {testData.map((item, index) => <ImageButton key={index} image={item.image} category={item.category}/>)}
       </ImageList>
+      <InstagramFeed />
       
       
     </Box>
