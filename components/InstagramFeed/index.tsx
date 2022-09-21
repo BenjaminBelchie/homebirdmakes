@@ -1,4 +1,4 @@
-import { Divider, ImageList, Stack, Typography, Box } from "@mui/material";
+import { Divider, ImageList, Stack, Typography, Box, ImageListItem, imageListItemClasses } from "@mui/material";
 import { useEffect, useState } from "react";
 import ImageButton from "../ImageButton";
 import InstagramIcon from '@mui/icons-material/Instagram';
@@ -37,16 +37,34 @@ export default function InstagramFeed(){
             <Box sx={{width:"100%", display:"flex", justifyContent: "center", paddingTop:"55px"}}>
                 <Typography variant="subtitle1">HOMEBIRD_MAKES</Typography>
             </Box>
-            
-            <Stack direction="row" sx={{marginBottom:"8rem", marginTop:"2rem", marginLeft:"2rem", marginRight:"2rem"}} spacing={2}>
+
+            <Box
+                sx={{
+                marginTop:"55px",
+                display: "grid",
+                marginBottom:"8rem", 
+                marginTop:"2rem", 
+                marginLeft:"2rem", 
+                marginRight:"2rem",
+                gridTemplateColumns: {
+                    mobile: "repeat(1, 1fr)",
+                    bigMobile: "repeat(1, 1fr)",
+                    tablet: "repeat(3, 1fr)",
+                    desktop: "repeat(6, 1fr)",
+                    gap: "2rem"
+                },
+                [`& .${imageListItemClasses.root}`]: {
+                    display: "flex",
+                    flexDirection: "column"
+                }
+                }}
+            >
                 {instaContent.map((post, index) => (
-                    <Box key={index} sx={{height:"300px", width:"100%"}}>
+                <ImageListItem key={index} sx={{width:"100%", height:"300px !important"}}>
                         <ImageButton image={post.img} hoverIcon="/images/instagram.png" imageLocation={post.link}/>
-                    </Box>
-                    
+                </ImageListItem>
                 ))}
-            </Stack>
-            
+            </Box>
         </Box>
     )
 }
