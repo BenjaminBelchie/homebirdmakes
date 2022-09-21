@@ -15,7 +15,15 @@ const theme = createTheme({
     secondary: {
       main:'#ffffff'
     }
-   }
+   },
+   breakpoints: {
+    values: {
+      mobile: 0,
+      bigMobile: 350,
+      tablet: 650,
+      desktop: 900
+    }
+  }
 })
 
 function MyApp({ Component, pageProps }: AppProps) {

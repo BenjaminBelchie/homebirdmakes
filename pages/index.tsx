@@ -12,6 +12,10 @@ import {
   FormControl,
   Menu,
   TextField,
+  Divider,
+  useMediaQuery,
+  createTheme,
+  ThemeProvider,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -22,6 +26,8 @@ import { useEffect, useState } from 'react';
 import InstagramFeed from '../components/InstagramFeed';
 import React from 'react';
 import { useRouter } from 'next/router';
+import ImageListItem, { imageListItemClasses } from "@mui/material/ImageListItem";
+import { display } from '@mui/system';
 
 export const getServerSideProps: GetServerSideProps = async(context) =>{
   // let etsyListings = null;
@@ -43,49 +49,48 @@ export const getServerSideProps: GetServerSideProps = async(context) =>{
 
 const testData = [
   {
-    image:"https://source.unsplash.com/gySMaocSdqs/600x300",
+    image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/il_794xN.2560737347_gafl_360x.jpg?v=1613653847",
     category: "Pumpkins"
   },
   {
-    image:"https://source.unsplash.com/gySMaocSdqs/600x300",
-    category: "Pumpkins"
+    image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/peonyandsage1_360x.png?v=1557930739",
+    category: "Peony and Sage"
   },
   {
-    image:"https://source.unsplash.com/gySMaocSdqs/600x300",
-    category: "Pumpkins"
+    image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/cathk1_360x.png?v=1547837918",
+    category: "Cath Kidson"
   },
   {
-    image:"https://source.unsplash.com/gySMaocSdqs/600x300",
-    category: "Pumpkins"
+    image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/il_794xN.1986567859_3oad_360x.jpg?v=1567435990",
+    category: "Mini Hangers"
   },
-  {
-    image:"https://source.unsplash.com/gySMaocSdqs/600x300",
-    category: "Pumpkins"
-  },
-  {
-    image:"https://source.unsplash.com/gySMaocSdqs/600x300",
-    category: "Pumpkins"
-  }
 ]
+
+// const theme = createTheme({
+//   breakpoints: {
+//     values: {
+//       mobile: 0,
+//       bigMobile: 350,
+//       tablet: 650,
+//       desktop: 900
+//     }
+//   }
+// });
 
 const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [searchAnchorEl, setSearchAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [showSearch, setShowSearch] = React.useState(false)
   const shopMenuOpen = Boolean(anchorEl);
-  const searchMenuOpen = Boolean(searchAnchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const openSearch = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSearchAnchorEl(event.currentTarget);
+    setShowSearch(!showSearch);
   };
 
-  const closeSearch = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setSearchAnchorEl(null);
-  };
   const handleShopMenuClose = () => {
     setAnchorEl(null);
   };
@@ -98,29 +103,24 @@ const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideP
     <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
       {/* Top logo and icons */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{width: '100%', margin:4}}>
-        <IconButton 
-          sx={{marginLeft:4, height:"fit-content"}}
-          onClick={openSearch}>
-          <SearchIcon/>
-        </IconButton>
-          <Menu
-              id="basic-menu"
-              anchorEl={searchAnchorEl}
-              open={searchMenuOpen}
-              onClose={closeSearch}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              <MenuItem><Stack direction="row"><TextField variant="standard" label="Search Products"/><Button variant="contained" size="small">Search</Button></Stack></MenuItem>
-            </Menu>
-        <IconButton onClick={() => {router.push("/")}} sx={{padding:0}}>
+        <Box sx={{display: 'flex', alignItems: 'center', width:"250px"}}>
+          <IconButton 
+            sx={{marginLeft:4, height:"fit-content"}}
+            onClick={openSearch}>
+            <SearchIcon/>
+          </IconButton>
+          <TextField variant="outlined" placeholder="Search" sx={{display:`${showSearch ? 'block':'none'}`}}/>
+        </Box>
+        
+        <IconButton onClick={() => {router.push("/")}} sx={{padding:0, width:"250px"}}>
           <Box component="img" src="/images/homebirdmakes_logo.png"  sx={{height: "250px"}}/>
         </IconButton>
-        
-        <IconButton sx={{marginRight:4, height:"fit-content"}}>
+        <Box sx={{width:"250px", display:"flex", justifyContent:"flex-end"}}>
+          <IconButton sx={{marginRight:4, height:"fit-content"}}>
           <FavoriteIcon/>
         </IconButton>
+        </Box>
+        
       </Stack>
 
       {/* Nav Links */}
@@ -151,12 +151,36 @@ const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideP
           <Button variant="text">About</Button>
           <Button variant="text">Contact</Button>
       </Stack>
+      <Divider sx={{width:"100%", marginTop:"47px"}}/>
 
-      <Typography variant="body1" sx={{marginTop:8}}>Collections</Typography>
-      
-      <ImageList sx={{ width: "80%", height:800, margin:4 }} cols={3} rowHeight={250}>
-        {testData.map((item, index) => <ImageButton key={index} image={item.image} category={item.category}/>)}
-      </ImageList>
+      <Typography variant="body1" sx={{marginTop:8}}>COLLECTIONS</Typography>
+
+      {/* <ThemeProvider theme={theme}> */}
+      <Box
+        sx={{
+          marginTop:"55px",
+          display: "grid",
+          gridTemplateColumns: {
+            mobile: "repeat(1, 1fr)",
+            bigMobile: "repeat(1, 1fr)",
+            tablet: "repeat(2, 1fr)",
+            desktop: "repeat(3, 1fr)",
+            gap: "2rem"
+          },
+          [`& .${imageListItemClasses.root}`]: {
+            display: "flex",
+            flexDirection: "column"
+          }
+        }}
+      >
+        {testData.map((item, index) => (
+          <ImageListItem key={item.img} sx={{width:"350px", height:"350px !important"}}>
+            <ImageButton key={index} image={item.image} category={item.category}/>
+        </ImageListItem>
+        ))}
+      </Box>
+    {/* </ThemeProvider> */}
+
       <InstagramFeed />
       
       

@@ -3,18 +3,28 @@ import {
     Box,
     Button,
     Card,
-    CardMedia
+    CardMedia,
+    Typography
 } from '@mui/material'
 export default function ImageButton(props: any){
+    const handleClick= () => {
+        // Send user to instagram for post
+        if(props.imageLocation){
+            window.open(props.imageLocation);
+        }
+    }
     return (
-        // <Card>
-        //     <CardMedia component="img" height="200" image={props.image}/>
-        //     
-        //         <Button variant="text">{props.category}</Button>
-        // </Card>
-
-        <Box sx={{width:"100%",height:"100%", backgroundPosition: "center center", backgroundRepeat: "no-repeat", backgroundImage:`url(${props.image}`}}>
-            <Button variant="text" sx={{height:"100%", width:"100%"}}>{props.category}</Button>
+        <Box sx={{width:"100%",height:"100%", backgroundPosition: "center center", backgroundSize:"cover",backgroundRepeat: "no-repeat", backgroundImage:`url(${props.image}), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.2))`, backgroundBlendMode:"overlay"}}>
+            <Button 
+                variant="text" 
+                onClick={handleClick}
+                sx={{
+                    height:"100%", 
+                    width:"100%", 
+                    ':hover':{backgroundColor:"rgba(255, 255, 255,0.1)", backgroundImage:`url(${props.hoverIcon})`, backgroundPosition: "center center", backgroundRepeat: "no-repeat",}
+                }}>
+                    <Typography variant="h6" sx={{color:"white", textTransform:"none"}}>{props.category}</Typography>
+                </Button>
         </Box>
         
     )
