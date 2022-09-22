@@ -9,11 +9,14 @@ const theme = createTheme({
    },
    palette:{
      primary: {
-      main: '#264653',
+      main: '#3D4246',
       light:'#2A9D8F',
     },
     secondary: {
-      main:'#ffffff'
+      main:'#F4C1E3'
+    },
+    info:{
+      main:"#788188"
     }
    },
    breakpoints: {

@@ -28,6 +28,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import ImageListItem, { imageListItemClasses } from "@mui/material/ImageListItem";
 import { display } from '@mui/system';
+import MailingList from '../components/MailingList';
 
 export const getServerSideProps: GetServerSideProps = async(context) =>{
   // let etsyListings = null;
@@ -182,6 +183,8 @@ const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideP
     {/* </ThemeProvider> */}
 
       <InstagramFeed />
+
+      <MailingList />
       
       
     </Box>
