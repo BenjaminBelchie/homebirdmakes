@@ -6,11 +6,16 @@ import {
     CardMedia,
     Typography
 } from '@mui/material'
+import { useRouter } from 'next/router';
 export default function ImageButton(props: any){
+    const router = useRouter();
     const handleClick= () => {
         // Send user to instagram for post
         if(props.imageLocation){
             window.open(props.imageLocation);
+        }
+        if(props.href){
+            router.push(props.href);
         }
     }
     return (
