@@ -48,7 +48,7 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
             <Typography variant="h5" sx={{marginBottom:"55px"}}>Contact</Typography>
             <Typography 
                 variant="body1">
-                    If you would like to get in touch please do email me at alibelcher@aol.com, and I'll get back to you as soon as I can.
+                    If you would like to get in touch please do email me at alibelcher@aol.com, and I&#39ll get back to you as soon as I can.
             </Typography>
 
             {errorState ?

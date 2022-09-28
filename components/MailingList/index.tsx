@@ -70,7 +70,7 @@ export default function MailingList(){
                 onClose={handleCloseSuccessSnackbar} 
                 anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}>
                 <Alert onClose={handleCloseSuccessSnackbar} severity="success">
-                    You've been added to the mailing list
+                    You&#39ve been added to the mailing list
                 </Alert>
             </Snackbar>
             <Snackbar open={openInfoSnackbar} autoHideDuration={6000} onClose={handleCloseInfoSnackbar}  anchorOrigin={{vertical: 'top', horizontal: 'right',}}>
