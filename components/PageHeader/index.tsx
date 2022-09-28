@@ -22,7 +22,7 @@ export default function PageHeader(){
     };
 
     const handleShopCollectionClick = (e: React.MouseEvent) => {
-        router.push(`/collection/${e.currentTarget.dataset.value}`);
+        router.push(`/collections/${e.currentTarget.dataset.value}`);
     }
     return(
         <>
@@ -49,7 +49,7 @@ export default function PageHeader(){
 
             {/* Nav Links */}
             <Stack direction="row" justifyContent="center">
-                <Button variant="text">Home</Button>
+                <Button variant="text" onClick={() => {router.push("/")}}>Home</Button>
                 <Button
                     id="basic-button"
                     aria-controls={shopMenuOpen ? 'basic-menu' : undefined}
@@ -72,8 +72,8 @@ export default function PageHeader(){
                     <MenuItem data-value="Mini_Hangers" onClick={handleShopCollectionClick}>Mini Hangers</MenuItem>
                 </Menu>
                 
-                <Button variant="text">About</Button>
-                <Button variant="text">Contact</Button>
+                <Button variant="text" onClick={() => {router.push("/about")}}>About</Button>
+                <Button variant="text" onClick={() => {router.push("/contact")}}>Contact</Button>
             </Stack>
             <Divider sx={{width:"100%", marginTop:"47px"}}/>
         </>
