@@ -3,3 +3,24 @@
 body{
     margin:0 !important;
 }
+
+@media screen and (min-width:1024px) {
+    .adminText{
+        font-size:28px !important;
+    }
+}
+
+@media screen and (min-width:768px) and (max-width:1023px) {
+    .adminText{
+        font-size:24px !important;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .adminText{
+        font-size:18px !important;
+    }
+    .adminPaper{
+        padding:2rem !important;
+    }
+}

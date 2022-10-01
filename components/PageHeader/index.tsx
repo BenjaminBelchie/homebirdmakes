@@ -55,7 +55,7 @@ export default function PageHeader(){
                     aria-controls={shopMenuOpen ? 'basic-menu' : undefined}
                     aria-haspopup="true"
                     aria-expanded={shopMenuOpen ? 'true' : undefined}
-                    onClick={handleClick}
+                    onClick={() => {window.open("https://www.etsy.com/uk/shop/homebirdmakes")}}
                 >Shop</Button>
                 <Menu
                     id="basic-menu"
