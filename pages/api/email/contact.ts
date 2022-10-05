@@ -24,8 +24,10 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
       }  
       transporter.sendMail(mailData, function (err, info) {
         if(err)
-          console.log(err)
+          res.status(500);
+        else
+          res.json({success: true});
       })
 
-      res.status(200)
+      
 }

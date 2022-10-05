@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Container, Divider, FormControl, Grid, Menu, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Container, Divider, FormControl, Grid, Menu, MenuItem, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import type { NextPage, InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { useState } from "react";
@@ -19,6 +19,17 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
     const [message, setMessage] = useState("");
 
     const [errorState, setErrorState] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [errorSnackbarState, setErrorSnackbarState] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setOpen(false);
+    };
+
+    const handleErrorSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        setErrorSnackbarState(false);
+    }
 
     const isValidEmail = (email: string) => {  
         return  /\S+@\S+\.\S+/.test(email);
@@ -26,11 +37,25 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
 
     const sendMessage = () => {
         if(name !== "" && email !== "" && message !== ""){ 
+            setLoading(true);
             axios.post('/api/email/contact',{
                 name:name,
                 email:email,
                 phone:phone,
                 message:message
+            }).then(response => {
+                if(response.data.success) {
+                    setName("");
+                    setEmail("");
+                    setPhone("");
+                    setMessage("");
+                    setOpen(true);
+                    setLoading(false);
+                }
+                else{
+                    setErrorSnackbarState(true);
+                    setLoading(false);
+                }
             })
         } else{
             setErrorState(true);
@@ -45,7 +70,6 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                 flexDirection: 'column', 
                 justifyContent: 'center', 
                 alignItems: 'center', 
-                padding:4
             }}>
           <PageHeader />
           <Box 
@@ -55,7 +79,8 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                 display:"flex", 
                 flexDirection: 'column', 
                 justifyContent: 'center', 
-                alignItems: 'center'
+                alignItems: 'center',
+                padding:4,
             }}>
             <Typography variant="h5" sx={{marginBottom:"55px"}}>Contact</Typography>
             <Typography 
@@ -86,6 +111,7 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                         variant="outlined"
                         label="Name" 
                         value={name} 
+                        disabled={loading}
                         onChange={(e) => {
                             setName(e.target.value); 
                             setErrorState(false);
@@ -98,6 +124,7 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                         error={errorState}
                         variant="outlined" 
                         label="Email" 
+                        disabled={loading}
                         value={email} 
                         onChange={(e) => {
                             setEmail(e.target.value);
@@ -110,6 +137,7 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                     variant="outlined"
                     label="Phone Number" 
                     value={phone} 
+                    disabled={loading}
                     onChange={(e) => {
                         setPhone(e.target.value);
                     }} 
@@ -121,6 +149,7 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                     error={errorState}
                     variant="outlined" 
                     label="Message" 
+                    disabled={loading}
                     value={message} 
                     onChange={(e) => {
                         setMessage(e.target.value);
@@ -134,7 +163,7 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                     variant="contained" 
                     color="secondary" 
                     sx={{color:"white", boxShadow:"none"}} 
-                    disabled={!isValidEmail(email)} 
+                    disabled={!isValidEmail(email)|| loading} 
                     onClick={sendMessage}>Send</Button>
             </Stack>
             
@@ -142,6 +171,26 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
           <Box sx={{marginTop:6}}>
                 <Footer />
             </Box>
+
+            <Snackbar
+                open={open} 
+                autoHideDuration={6000} 
+                onClose={handleClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right', }}>
+                <Alert onClose={handleClose} severity="success">
+                Email Sent
+                </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={errorSnackbarState} 
+                autoHideDuration={6000} 
+                onClose={handleErrorSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right', }}>
+                <Alert onClose={handleErrorSnackbarClose} severity="error">
+                Error Sending Email
+                </Alert>
+            </Snackbar>
          
         </Box >
     )
