@@ -15,29 +15,36 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
     const para2 = "I started sewing quite a few years ago as a hobby when my children were small, I made cushions and gifts for family and friends.  After I while I decided to open my own Etsy shop to see if any of my makes would sell. I have slowly built up my Etsy shop over the years and decided it was time to have my own website along side Etsy.";
     const para3 = "You can visit my Etsy shop to see other lovely makes to buy as well as read the lots of 5 star reviews I have received and am proud of."
     return(
-        <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-         <PageHeader />
+        <Box sx={{maxWidth:"100vw"}}>
+            <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+            <PageHeader />
 
-        <Box sx={{maxWidth:"930px", display:"flex", flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-            <Typography variant="h5" sx={{marginTop:"55px", marginBottom:"55px"}}>About</Typography>
-            <Stack spacing={2}>
-                <Typography variant="body1">{para1}</Typography>
-                <Typography variant="body1">{para2}</Typography>
-                <Typography variant="body1">{para3}</Typography>
-            </Stack>
-            <Box sx={{marginTop:4, marginBottom:2}} component="img" src="/images/Ali.jpg"/>
-            <Typography variant="body1">My lovely work room, I am lucky to have a space to call my own.</Typography>
-            <Stack direction="row" spacing={2} sx={{marginTop:2}}>
-                <Box component="img" src="/images/Room1.jpg"/>
-                <Box component="img" src="/images/Room2.jpg"/>
-            </Stack>
-            
+            <Box sx={{maxWidth:"930px", display:"flex", flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                <Typography variant="h5" sx={{marginTop:"55px", marginBottom:"55px"}}>About</Typography>
+                <Stack spacing={2}>
+                    <Box sx={{maxWidth:"100vw", paddingLeft:"2em", paddingRight:"2em"}}><Typography variant="body1">{para1}</Typography></Box>
+                    <Box sx={{maxWidth:"100vw", paddingLeft:"2em", paddingRight:"2em"}}><Typography variant="body1">{para2}</Typography></Box>
+                    <Box sx={{maxWidth:"100vw", paddingLeft:"2em", paddingRight:"2em"}}><Typography variant="body1">{para3}</Typography></Box>
+                </Stack>
+                <Box sx={{marginTop:4, marginBottom:2}} component="img" src="/images/Ali.jpg"/>
+                <Typography sx={{paddingLeft:"2em", paddingRight:"2em"}} variant="body1">My lovely work room, I am lucky to have a space to call my own.</Typography>
+
+                <Grid container spacing={2} columns={{ xs: 1, md: 12 }} sx={{marginTop:2, display:"flex", alignItems: "center", justifyContent: "center"}}>
+                    <Grid item xs={1} md={6}>
+                        <Box component="img" src="/images/Room1.jpg"/>
+                    </Grid>
+                    <Grid item xs={1} md={6}>
+                        <Box component="img" src="/images/Room2.jpg"/>
+                    </Grid>
+                </Grid>
+                
+            </Box>
+            <Box sx={{marginTop:6}}>
+                <Footer />
+            </Box>
+                
+            </Box >
         </Box>
-        <Box sx={{marginTop:6}}>
-            <Footer />
-        </Box>
-            
-        </Box >
     )
 }
 

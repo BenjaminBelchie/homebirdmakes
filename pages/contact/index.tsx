@@ -1,4 +1,5 @@
 import { Alert, Box, Button, Container, Divider, FormControl, Grid, Menu, MenuItem, Stack, TextField, Typography } from "@mui/material";
+import axios from "axios";
 import type { NextPage, InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { useState } from "react";
 import Footer from "../../components/Footer";
@@ -19,9 +20,18 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
 
     const [errorState, setErrorState] = useState(false);
 
+    const isValidEmail = (email: string) => {  
+        return  /\S+@\S+\.\S+/.test(email);
+    }
+
     const sendMessage = () => {
         if(name !== "" && email !== "" && message !== ""){ 
-
+            axios.post('/api/email/contact',{
+                name:name,
+                email:email,
+                phone:phone,
+                message:message
+            })
         } else{
             setErrorState(true);
         }
@@ -34,7 +44,8 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                 display: 'flex', 
                 flexDirection: 'column', 
                 justifyContent: 'center', 
-                alignItems: 'center'
+                alignItems: 'center', 
+                padding:4
             }}>
           <PageHeader />
           <Box 
@@ -123,6 +134,7 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                     variant="contained" 
                     color="secondary" 
                     sx={{color:"white", boxShadow:"none"}} 
+                    disabled={!isValidEmail(email)} 
                     onClick={sendMessage}>Send</Button>
             </Stack>
             
