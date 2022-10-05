@@ -1,6 +1,7 @@
 import { Alert, Box, Button, Container, Divider, FormControl, Grid, Menu, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import type { NextPage, InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { useState } from "react";
+import Footer from "../../components/Footer";
 import MailingList from "../../components/MailingList";
 import PageHeader from "../../components/PageHeader";
 
@@ -127,7 +128,7 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
             
           </Box>
           <Box sx={{marginTop:6}}>
-                <MailingList />
+                <Footer />
             </Box>
          
         </Box >

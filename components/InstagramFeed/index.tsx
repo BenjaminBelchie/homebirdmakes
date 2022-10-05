@@ -42,7 +42,7 @@ export default function InstagramFeed(){
                 sx={{
                 marginTop:"55px",
                 display: "grid",
-                marginBottom:"8rem", 
+                marginBottom:"71px", 
                 marginTop:"2rem", 
                 marginLeft:"2rem", 
                 marginRight:"2rem",

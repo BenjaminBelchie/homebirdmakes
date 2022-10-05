@@ -45,7 +45,7 @@ export default function MailingList(){
 
     return(
         <>
-        <Box sx={{marginBottom:10}}>
+        <Box sx={{marginBottom:2}}>
             <Typography variant="caption" color="primary">Join my mailing list</Typography>
             <Stack direction="row">
                 <TextField 

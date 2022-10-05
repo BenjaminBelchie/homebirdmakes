@@ -28,21 +28,13 @@ export default function PageHeader(){
         <>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{width: '100%', margin:4}}>
                 <Box sx={{display: 'flex', alignItems: 'center', width:"250px"}}>
-                <IconButton 
-                    sx={{marginLeft:4, height:"fit-content"}}
-                    onClick={openSearch}>
-                    <SearchIcon/>
-                </IconButton>
-                <TextField variant="outlined" placeholder="Search" sx={{display:`${showSearch ? 'block':'none'}`}}/>
+                    <TextField variant="outlined" placeholder="Search" sx={{display:`${showSearch ? 'block':'none'}`}}/>
                 </Box>
                 
                 <IconButton onClick={() => {router.push("/")}} sx={{padding:0, width:"250px"}}>
-                <Box component="img" src="/images/homebirdmakes_logo.png"  sx={{height: "250px"}}/>
+                    <Box component="img" src="/images/homebirdmakes_logo.png"  sx={{height: "250px"}}/>
                 </IconButton>
                 <Box sx={{width:"250px", display:"flex", justifyContent:"flex-end"}}>
-                <IconButton sx={{marginRight:4, height:"fit-content"}}>
-                <FavoriteIcon/>
-                </IconButton>
                 </Box>
                 
             </Stack>

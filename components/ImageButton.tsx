@@ -15,7 +15,7 @@ export default function ImageButton(props: any){
             window.open(props.imageLocation);
         }
         if(props.href){
-            router.push(props.href);
+            window.open(props.href);
         }
     }
     return (

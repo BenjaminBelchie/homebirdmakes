@@ -9,8 +9,8 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import ImageListItem, { imageListItemClasses } from "@mui/material/ImageListItem";
 import { display } from '@mui/system';
-import MailingList from '../components/MailingList';
 import PageHeader from '../components/PageHeader';
+import Footer from '../components/Footer';
 
 export const getServerSideProps: GetServerSideProps = async(context) =>{
   // let etsyListings = null;
@@ -34,22 +34,32 @@ const testData = [
   {
     image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/il_794xN.2560737347_gafl_360x.jpg?v=1613653847",
     category: "Pumpkins",
-    href:"Pumpkins"
+    href:"https://www.etsy.com/uk/shop/homebirdmakes?section_id=29378110"
   },
   {
     image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/peonyandsage1_360x.png?v=1557930739",
-    category: "Peony and Sage",
-    href:"Peony_and_Sage"
+    category: "Fabric Baskets",
+    href:"https://www.etsy.com/uk/shop/homebirdmakes?section_id=22914008"
   },
   {
     image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/cathk1_360x.png?v=1547837918",
-    category: "Cath Kidson",
-    href:"Cath_Kidson"
+    category: "Purses and Pouches",
+    href:"https://www.etsy.com/uk/shop/homebirdmakes?section_id=21804003"
   },
   {
     image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/il_794xN.1986567859_3oad_360x.jpg?v=1567435990",
-    category: "Mini Hangers",
-    href:"Mini_Hangers"
+    category: "Bookmarks",
+    href:"https://www.etsy.com/uk/shop/homebirdmakes?section_id=24655291"
+  },
+  {
+    image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/il_794xN.1986567859_3oad_360x.jpg?v=1567435990",
+    category: "Large Zip Bags",
+    href:"https://www.etsy.com/uk/shop/homebirdmakes?section_id=37258436"
+  },
+  {
+    image:"https://cdn.shopify.com/s/files/1/0014/1269/4073/collections/il_794xN.1986567859_3oad_360x.jpg?v=1567435990",
+    category: "Garlands",
+    href:"https://www.etsy.com/uk/shop/homebirdmakes?section_id=23547704"
   },
 ]
 
@@ -84,8 +94,8 @@ const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideP
         }}
       >
         {testData.map((item, index) => (
-          <ImageListItem key={item.img} sx={{width:"350px", height:"350px !important"}}>
-            <ImageButton key={index} image={item.image} category={item.category} href={`collections/${item.href}`}/>
+          <ImageListItem key={item.image} sx={{width:"350px", height:"350px !important"}}>
+            <ImageButton key={index} image={item.image} category={item.category} href={item.href}/>
         </ImageListItem>
         ))}
       </Box>
@@ -93,7 +103,7 @@ const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideP
 
       <InstagramFeed />
 
-      <MailingList />
+      <Footer />
       
       
     </Box>
