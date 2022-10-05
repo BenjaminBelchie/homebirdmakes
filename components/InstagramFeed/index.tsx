@@ -34,7 +34,8 @@ export default function InstagramFeed(){
     return(
         <Box sx={{width:"100vw"}}>
             <Divider sx={{marginTop:2, marginBottom:2, width:"100%"}}><Typography variant="subtitle1">Instagram</Typography></Divider>
-            <Box sx={{width:"100%", display:"flex", justifyContent: "center", paddingTop:"55px"}}>
+            <Box sx={{width:"100%", display:"flex", justifyContent: "center", alignItems: "center", paddingTop:"55px"}}>
+                <InstagramIcon sx={{fontSize:"16px", marginRight:1}} />
                 <Typography variant="subtitle1">HOMEBIRD_MAKES</Typography>
             </Box>
 

@@ -26,7 +26,10 @@ export default function ImageButton(props: any){
                 sx={{
                     height:"100%", 
                     width:"100%", 
-                    ':hover':{backgroundColor:"rgba(255, 255, 255,0.1)", backgroundImage:`url(${props.hoverIcon})`, backgroundPosition: "center center", backgroundRepeat: "no-repeat",}
+                    backgroundImage:`url(${props.hoverIcon})`,
+                    backgroundPosition: "center center",
+                    backgroundRepeat: "no-repeat",
+                    ':hover':{backgroundColor:"rgba(255, 255, 255,0.1)", backgroundImage:`url(${props.hoverIcon})`, backgroundPosition: "center center", backgroundRepeat: "no-repeat",},
                 }}>
                     <Typography variant="h6" sx={{color:"white", textTransform:"none"}}>{props.category}</Typography>
                 </Button>
