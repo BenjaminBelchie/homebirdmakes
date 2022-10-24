@@ -49,11 +49,11 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                     <table className='links-table'>
                         <tbody>
                             <tr><td><a className="link" href="https://www.etsy.com/uk/shop/homebirdmakes">Etsy Shop</a></td></tr>
-                            <tr><td><a className="link" href="https://www.etsy.com/uk/shop/homebirdmakes?ref=seller-platform-mcnav&section_id=29378110">Pumpkins</a></td></tr>
+                            <tr><td><a className="link" href="https://www.etsy.com/uk/shop/homebirdmakes?ref=seller-platform-mcnav&section_id=20497426">Christmas</a></td></tr>
                             <tr><td><a className="link" href="https://www.subscribepage.com/homebirdmakes-newsletter-sign-up">Subscribe to newsletter</a></td></tr>
                             <tr><td><a className="link" href="https://www.etsy.com/uk/shop/homebirdmakes?ref=seller-platform-mcnav&section_id=28243644">Sale Page</a></td></tr>
                             <tr><td><a className="link" href="https://homebirdmakes.vercel.app/">Website</a></td></tr>
-                            <tr><td><a className="link" href="https://www.pinterest.co.uk/homebirdmakes/">Pintrest</a></td></tr>
+                            <tr><td><a className="link" href="https://www.pinterest.co.uk/homebirdmakes/">Pinterest</a></td></tr>
                             <tr><td><a className="link" href="https://www.facebook.com/homebirdmakes">Facebook</a></td></tr>
                         </tbody>
                     
