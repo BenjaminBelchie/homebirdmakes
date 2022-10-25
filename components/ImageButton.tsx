@@ -19,7 +19,16 @@ export default function ImageButton(props: any){
         }
     }
     return (
-        <Box sx={{width:"100%",height:"100%", backgroundPosition: "center center", backgroundSize:"cover",backgroundRepeat: "no-repeat", backgroundImage:`url(${props.image}), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.2))`, backgroundBlendMode:"overlay"}}>
+        <Box 
+            sx={{
+                width:"100%",
+                height:"100%", 
+                backgroundPosition: "center center", 
+                backgroundSize:"cover",
+                backgroundRepeat: "no-repeat", 
+                backgroundImage:`url(${props.image}), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.2))`,
+                 backgroundBlendMode:"overlay"
+            }}>
             <Button 
                 variant="text" 
                 onClick={handleClick}
