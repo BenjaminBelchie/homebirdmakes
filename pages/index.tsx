@@ -1,7 +1,6 @@
-import type { NextPage, InferGetServerSidePropsType, GetServerSideProps } from 'next'
+import type { InferGetServerSidePropsType } from 'next'
 import {
   Box,
-  CircularProgress,
   Typography,
 } from '@mui/material';
 import ImageButton from '../components/ImageButton';
@@ -10,33 +9,19 @@ import ImageListItem, { imageListItemClasses } from "@mui/material/ImageListItem
 import PageHeader from '../components/PageHeader';
 import dynamic from "next/dynamic";
 import { useQuery } from 'react-query';
+import { supabase } from "../lib/supabase";
 const InstagramFeed = dynamic(()=> import('../components/InstagramFeed'))
 const Footer = dynamic(()=> import('../components/Footer'))
 
-export const getServerSideProps: GetServerSideProps = async(context) =>{
+export const getServerSideProps = async() =>{
+    const {data} = await supabase.from("collections").select("*");
     
     return{
-      props:{null: null}
+      props:{data}
     }
   }
 
-async function fetchCollections(){
-  const response = await fetch('/api/collections/findAll');
-  return response.json();
-}
-
-const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const {data, status} = useQuery(['collections'], fetchCollections);
-
-  if(status === 'loading'){
-    return(
-      <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <PageHeader />
-        <CircularProgress sx={{marginTop:8}}/>
-      </Box>
-      
-    )
-  }
+const Home = ({data}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   
   return (
     <Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
@@ -61,11 +46,11 @@ const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideP
             }
           }}
         >
-              {data.map((item, index) => (
-                <ImageListItem key={item.image} sx={{width:"350px", height:"350px !important"}}>
-                  <ImageButton key={index} image={item.image} category={item.category} href={item.href}/>
-              </ImageListItem>
-              ))}
+          {data?.map((item, index) => (
+            <ImageListItem key={item.image} sx={{width:"350px", height:"350px !important"}}>
+              <ImageButton key={index} image={`/images/collections/${item.image}`} category={item.category} href={item.etsy_link}/>
+          </ImageListItem>
+          ))}
           
         </Box>
 
