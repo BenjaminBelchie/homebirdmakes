@@ -4,30 +4,20 @@ import { useState } from "react";
 import Footer from "../../components/Footer";
 import MailingList from "../../components/MailingList";
 import PageHeader from "../../components/PageHeader";
+import { supabase } from "../../lib/supabase";
+import { Database } from "../../lib/database.types";
 
-export const getServerSideProps: GetServerSideProps = async(context) =>{
+type LinkType = [Database["public"]["Tables"]["links"]["Row"]]
+
+export const getServerSideProps = async() =>{
+    const {data} = await supabase.from("links").select("*");
+    console.log(data);
       return{
-        props:{null: null}
+        props:{data}
       }
     }
 
-const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [message, setMessage] = useState("");
-
-    const [errorState, setErrorState] = useState(false);
-
-    const sendMessage = () => {
-        if(name !== "" && email !== "" && message !== ""){ 
-
-        } else{
-            setErrorState(true);
-        }
-        console.log(name, email, phone, message);
-    }
-
+const Collection = ({data}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     return(
         <Box 
             sx={{
@@ -48,19 +38,11 @@ const Collection: NextPage = (props: InferGetServerSidePropsType<typeof getServe
                 }}>
                     <table className='links-table'>
                         <tbody>
-                            <tr><td><a className="link" href="https://www.etsy.com/uk/shop/homebirdmakes">Etsy Shop</a></td></tr>
-                            <tr><td><a className="link" href="https://www.subscribepage.com/homebirdmakes-newsletter-sign-up">Subscribe to newsletter</a></td></tr>
-                            <tr><td><a className="link" href="https://www.etsy.com/uk/shop/homebirdmakes?ref=seller-platform-mcnav&section_id=28243644">Sale Page</a></td></tr>
-                            <tr><td><a className="link" href="https://homebirdmakes.vercel.app/">Website</a></td></tr>
-                            <tr><td><a className="link" href="https://www.pinterest.co.uk/homebirdmakes/">Pinterest</a></td></tr>
-                            <tr><td><a className="link" href="https://www.facebook.com/homebirdmakes">Facebook</a></td></tr>
+                            {data?.map((link) =>(
+                                <tr key={link.id}><td><a className="link" href={link.link}>{link.display_text}</a></td></tr>
+                            ))}
+                           
                         </tbody>
-                    
-                        
-                        
-                        
-                        
-                        
                     </table>
                 <Box sx={{marginTop:6}}>
                     <Footer />
