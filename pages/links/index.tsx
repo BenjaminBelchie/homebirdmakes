@@ -5,13 +5,12 @@ import Footer from "../../components/Footer";
 import MailingList from "../../components/MailingList";
 import PageHeader from "../../components/PageHeader";
 import { supabase } from "../../lib/supabase";
-import { Database } from "../../lib/database.types";
+import { Database } from "../../lib/database";
 
 type LinkType = [Database["public"]["Tables"]["links"]["Row"]]
 
 export const getServerSideProps = async() =>{
     const {data} = await supabase.from("links").select("*");
-    console.log(data);
       return{
         props:{data}
       }

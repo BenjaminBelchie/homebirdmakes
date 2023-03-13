@@ -1,0 +1,49 @@
+export interface Database {
+    public: {
+        Tables: {
+            collections:{
+                Row:{
+                    id:number
+                    image:string
+                    category:string
+                    etsy_link:string
+                    created_at:string|null
+                }
+                Insert:{
+                    id?:number
+                    image:string
+                    category:string
+                    etsy_link:string
+                    created_at?:string|null
+                }
+                Update:{
+                    id?:number
+                    image?:string
+                    category?:string
+                    etsy_link?:string
+                    created_at?:string|null
+                }
+            }
+            links:{
+                Row:{
+                    id:number
+                    display_text:string
+                    link:string
+                    created_at:string|null
+                }
+                Insert:{
+                    id?:number
+                    display_text:string
+                    link:string
+                    created_at?:string|null
+                }
+                Update:{
+                    id?:number
+                    display_text?:string
+                    link?:string
+                    created_at?:string|null
+                }
+            }
+        }
+    }
+}
