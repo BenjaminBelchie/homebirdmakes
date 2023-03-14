@@ -48,7 +48,7 @@ const Home = ({data}: InferGetServerSidePropsType<typeof getServerSideProps>) =>
         >
           {data?.map((item, index) => (
             <ImageListItem key={item.image} sx={{width:"350px", height:"350px !important"}}>
-              <ImageButton key={index} image={`/images/collections/${item.image}`} category={item.category} href={item.etsy_link}/>
+              <ImageButton key={index} image={`${item.image}`} category={item.category} href={item.etsy_link}/>
           </ImageListItem>
           ))}
           

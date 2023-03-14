@@ -1,9 +1,9 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { createTheme, ThemeProvider } from '@mui/material'
-import { UserProvider } from '@auth0/nextjs-auth0';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Script from 'next/script';
+import { Analytics } from '@vercel/analytics/react';
 
 const theme = createTheme({
   typography: {
@@ -52,11 +52,10 @@ function MyApp({ Component, pageProps }: AppProps) {
                   `}
     </Script>
     <QueryClientProvider client={queryClient}>
-      <UserProvider>
         <ThemeProvider theme={theme}>
             <Component {...pageProps} />
+            <Analytics />
           </ThemeProvider>
-      </UserProvider>
     </QueryClientProvider>
     </>
     )
