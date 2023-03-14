@@ -4,12 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma db push && next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^1.9.1",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.3",
@@ -17,8 +16,8 @@
     "@next-auth/prisma-adapter": "^1.0.4",
     "@prisma/client": "^4.3.1",
     "@supabase/supabase-js": "^2.10.0",
+    "@vercel/analytics": "^0.1.11",
     "axios": "^0.27.2",
-    "firebase": "^9.9.4",
     "https-localhost": "^4.7.1",
     "isomorphic-fetch": "^3.0.0",
     "moment": "^2.29.4",
