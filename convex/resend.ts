@@ -4,7 +4,7 @@ import { v } from "convex/values";
 import { components, internal } from "./_generated/api";
 import { internalMutation, mutation } from "./_generated/server";
 
-export const resend = new Resend(components.resend, {
+export const resend: Resend = new Resend(components.resend, {
   testMode: false,
   onEmailEvent: internal.resend.handleContactEmailEvent,
 });

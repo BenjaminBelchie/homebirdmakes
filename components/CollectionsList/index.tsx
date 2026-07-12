@@ -12,9 +12,9 @@ export default function CollectionsList(props: {
 
   return (
     <div className="mt-[55px] grid grid-cols-1 gap-8 tablet:grid-cols-2 desktop:grid-cols-3">
-      {collections.map((item, index) => (
+      {collections.map((item) => (
         <div key={item.image} className="flex h-[350px] w-[350px] flex-col">
-          <ImageButton key={index} image={`${item.image}`} category={item.category} href={item.etsy_link} />
+          <ImageButton image={`${item.image}`} category={item.category} href={item.etsy_link} />
         </div>
       ))}
     </div>
