@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npx convex deploy --yes && next build",
     "start": "next start",
     "lint": "eslint ."
   },
@@ -43,6 +43,7 @@
     "@eslint/eslintrc": "^3.3.6",
     "@eslint/js": "^9.39.1",
     "@types/node": "^22.20.1",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.21",

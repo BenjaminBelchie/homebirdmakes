@@ -28,7 +28,7 @@ export default function PageHeader(){
                         </Show>
                     )}
                     <Show when="signed-in">
-                        <UserButton afterSignOutUrl="/" />
+                        <UserButton />
                     </Show>
                 </div>
                 
