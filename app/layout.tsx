@@ -5,12 +5,12 @@ import Providers from "./providers";
 import ConvexClientProvider from "../components/ConvexClientProvider";
 import "../styles/globals.css";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
-import { Montserrat, Merriweather } from "next/font/google";
+import { Montserrat, Merriweather, Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 
 const merriweatherHeading = Merriweather({subsets:['latin'],variable:'--font-heading'});
 
-const montserrat = Montserrat({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en" className={cn("font-sans", montserrat.variable, merriweatherHeading.variable)}>
+    <html lang="en" className={cn("font-sans", inter.variable, merriweatherHeading.variable)}>
       <body>
         <ClerkProvider>
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
