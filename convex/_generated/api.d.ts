@@ -9,7 +9,9 @@
  */
 
 import type * as collections from "../collections.js";
+import type * as http from "../http.js";
 import type * as links from "../links.js";
+import type * as resend from "../resend.js";
 
 import type {
   ApiFromModules,
@@ -19,7 +21,9 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   collections: typeof collections;
+  http: typeof http;
   links: typeof links;
+  resend: typeof resend;
 }>;
 
 /**
@@ -48,4 +52,6 @@ export declare const internal: FilterApi<
   FunctionReference<any, "internal">
 >;
 
-export declare const components: {};
+export declare const components: {
+  resend: import("@convex-dev/resend/_generated/component.js").ComponentApi<"resend">;
+};

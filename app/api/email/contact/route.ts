@@ -1,31 +1,28 @@
-import nodemailer from "nodemailer";
+import { api } from "@/convex/_generated/api";
+import { ConvexHttpClient } from "convex/browser";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+  if (!convexUrl) {
+    return NextResponse.json({ success: false }, { status: 500 });
+  }
+
   const body = await req.json();
-
-  const transporter = nodemailer.createTransport({
-    port: 465,
-    host: "smtp.gmail.com",
-    auth: {
-      user: "homebirdmakes.website@gmail.com",
-      pass: process.env.GMAIL_SMTP_PASSWORD,
-    },
-    secure: true,
-  });
-
-  const mailData = {
-    from: "homebirdmakes.websote@gmail.com",
-    to: "alibelcher@aol.com",
-    subject: `Message From ${body.name}`,
-    text: `${body.message} | Sent from: ${body.email}`,
-    html: `<div>${body.message}</div><p>Sent from: ${body.email}</p>`,
-  };
+  const client = new ConvexHttpClient(convexUrl);
 
   try {
-    await transporter.sendMail(mailData);
+    await client.mutation(api.resend.sendContactEmail, {
+      name: String(body?.name ?? ""),
+      email: String(body?.email ?? ""),
+      phone: body?.phone ? String(body.phone) : undefined,
+      message: String(body?.message ?? ""),
+    });
+
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ success: false }, { status: 500 });
+  } catch (error) {
+    console.error("Contact email send failed", error);
+    const message = error instanceof Error ? error.message : "Failed to send contact email";
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }

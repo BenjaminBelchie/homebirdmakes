@@ -30,10 +30,17 @@ NEXT_PUBLIC_CONVEX_URL=
 NEXT_PUBLIC_GOOGLE_ANALYTICS=
 
 # Contact + mailing list APIs
-GMAIL_SMTP_PASSWORD=
+CONTACT_EMAIL_FROM=
+CONTACT_EMAIL_TO=
+CONTACT_EMAIL_BRAND_URL=https://homebirdmakes.co.uk
+CONTACT_EMAIL_LOGO_URL=https://homebirdmakes.co.uk/images/homebirdmakes_logo.png
 MAILCHIMP_API_KEY=
 MAILCHIMP_API_SERVER=
 MAILCHIMP_AUDIENCE_ID=
+
+# Resend (set in Convex dashboard for Convex functions)
+RESEND_API_KEY=
+RESEND_WEBHOOK_SECRET=
 ```
 
 ## Convex Functions Expected By The Website

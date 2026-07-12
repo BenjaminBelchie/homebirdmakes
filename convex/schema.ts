@@ -12,4 +12,13 @@ export default defineSchema({
     display_text: v.string(),
     link: v.string(),
   }),
+
+  contactEmailEvents: defineTable({
+    emailId: v.string(),
+    eventType: v.string(),
+    event: v.any(),
+    createdAt: v.number(),
+  })
+    .index("by_email_id", ["emailId"])
+    .index("by_event_type", ["eventType"]),
 });
