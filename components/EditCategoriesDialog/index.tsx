@@ -1,5 +1,3 @@
-import { Button, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions, Stack, Box, Typography, Divider, IconButton } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
 import { useState } from "react";
 
 type Props = {
@@ -19,55 +17,44 @@ export default function EditCategoriesDialog(props:Props){
         setAddCategory(true);
     }
 
+    if (!props.open) {
+        return null;
+    }
+
     return(
-        <div>
-        <Dialog open={props.open} onClose={handleClose} PaperProps={{
-            style:{
-                width: '600px',
-            }
-        }}>
-            <DialogTitle>
-                Current Categories
-                <IconButton
-                    aria-label="close"
-                    onClick={handleClose}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: (theme) => theme.palette.grey[500],
-                    }}
-                    >
-                    <CloseIcon />
-                </IconButton>
-                </DialogTitle>
-            <DialogContent>
-                <Divider sx={{marginBottom:2, width:"100%"}} />
-                <Stack direction="column" spacing={2}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+            <div className="relative w-full max-w-[600px] rounded-md bg-white p-4 shadow-xl sm:p-6">
+                <div className="mb-3 flex items-center justify-between">
+                    <h2 className="text-xl">Current Categories</h2>
+                    <button aria-label="close" className="text-slate-500" onClick={handleClose} type="button">
+                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                            <path d="M6 6l12 12M18 6 6 18" />
+                        </svg>
+                    </button>
+                </div>
+                <div className="mb-2 h-px w-full bg-slate-200" />
+                <div className="flex flex-col gap-2">
                     {props.categories.map((category) => {
                         return(
-                            <Stack key={category.id} direction="row" sx={{justifyContent:"space-between"}}>
-                                <Typography variant="body1" color="primary">{category.category}</Typography>
-                                <Button color="error" variant="contained">Remove</Button>
-                            </Stack>
+                            <div key={category.id} className="flex justify-between">
+                                <p className="text-brand-primary">{category.category}</p>
+                                <button className="rounded bg-red-600 px-3 py-1 text-sm text-white" type="button">Remove</button>
+                            </div>
                         )
                     })}
-                    {props.categories.length >= 4 ? <></>: 
+                    {props.categories.length >= 4 ? null:
                         <>
-                            <Button variant="contained" color="success" sx={{width:"fit-content"}} onClick={handleAddCategory}>Add Category</Button>
+                            <button className="w-fit rounded bg-emerald-600 px-3 py-1 text-white" onClick={handleAddCategory} type="button">Add Category</button>
                             {addCategory ?
-                                <>
-                                    <TextField variant="standard" color="primary" label="Category Name"/>
-                                </>
-                                : <></>
+                                <input className="w-full rounded-none border-0 border-b border-slate-300 bg-white px-0 py-2 text-brand-primary focus:border-brand-info focus:outline-none" placeholder="Category Name" />
+                                : null
                             }
                         </>
                     }
-                </Stack>
-                <Divider sx={{marginTop:2,marginBottom:1, width:"100%"}} />
-                <Typography variant="caption" color="error">(Max 6)</Typography>
-            </DialogContent>
-        </Dialog>
+                </div>
+                <div className="mb-1 mt-2 h-px w-full bg-slate-200" />
+                <p className="text-xs text-red-600">(Max 6)</p>
+            </div>
         </div>
     )
 }

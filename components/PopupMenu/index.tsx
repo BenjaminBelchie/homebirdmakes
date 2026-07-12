@@ -1,54 +1,66 @@
-import { Button, Menu, MenuItem, PopoverOrigin } from "@mui/material"
+"use client";
+
 import { useState } from "react";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 type Props = {
     menuItems:any[];
     buttonText:string;
-    anchorOrigin:PopoverOrigin;
-    transformOrigin:PopoverOrigin;
+    anchorOrigin:{vertical:string; horizontal:string};
+    transformOrigin:{vertical:string; horizontal:string};
     itemFontSize:string;
 }
 
 export default function PopupMenu(props:Props){
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const menuOpen = Boolean(anchorEl);
+    const [menuOpen, setMenuOpen] = useState(false);
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
+    const handleClick = () => {
+        setMenuOpen((prev) => !prev);
       };
   
       const handleMenuClose = () => {
-        setAnchorEl(null);
+        setMenuOpen(false);
       };
+
     return(
-        <>
-        <Button
-            id="basic-button"
-            aria-controls={menuOpen ? 'basic-menu' : undefined}
+        <div className="relative">
+        <button
+            id="popup-button"
+            aria-controls={menuOpen ? 'popup-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={menuOpen ? 'true' : undefined}
             onClick={handleClick}
-            endIcon={<KeyboardArrowDownIcon/>}
-        >Filter</Button>
-        <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={menuOpen}
-            onClose={handleMenuClose}
-            anchorOrigin={props.anchorOrigin}
-            transformOrigin={props.transformOrigin}
-            MenuListProps={{
-                'aria-labelledby': 'basic-button',
-            }}
+            className="flex items-center gap-1 text-sm text-brand-primary"
+            type="button"
+        >
+            {props.buttonText}
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" />
+            </svg>
+        </button>
+        {menuOpen ? (
+            <div
+                id="popup-menu"
+                className="absolute left-0 top-full z-30 mt-2 min-w-[180px] rounded-md border border-slate-200 bg-white py-1 shadow-lg"
+                role="menu"
+                aria-labelledby="popup-button"
             >
                 {props.menuItems.map((item, index) => {
                     return(
-                        <MenuItem key={index} data-value={item.value} sx={{fontSize:props.itemFontSize}}>{item.title}</MenuItem>
+                        <button
+                            type="button"
+                            key={index}
+                            data-value={item.value}
+                            style={{fontSize:props.itemFontSize}}
+                            className="block w-full px-3 py-2 text-left text-brand-primary hover:bg-slate-50"
+                            onClick={handleMenuClose}
+                        >
+                            {item.title}
+                        </button>
                     )
                 })}
-        </Menu>
-        </>
+            </div>
+        ) : null}
+        </div>
         
     )
 }
