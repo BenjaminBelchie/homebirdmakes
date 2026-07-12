@@ -10,13 +10,13 @@ export default function PageHeader(){
     return(
         <>
             <div className="m-4 flex w-full items-center justify-between">
-                <div className="flex w-[250px] items-center">
+                <div className="flex min-w-0 flex-1 items-center">
                 </div>
                 
-                <button type="button" onClick={() => {router.push("/")}} className="w-[250px] p-0">
-                    <img src="/images/homebirdmakes_logo.png" className="h-[250px]" alt="Homebird Makes" />
+                <button type="button" onClick={() => {router.push("/")}} className="flex-shrink-0 p-0">
+                    <img src="/images/homebirdmakes_logo.png" className="h-[180px] w-auto sm:h-[250px]" alt="Homebird Makes" />
                 </button>
-                <div className="flex w-[250px] items-center justify-end gap-1">
+                <div className="flex min-w-0 flex-1 items-center justify-end gap-1">
                     {!HIDE_AUTH_UI && (
                         <Show when="signed-out">
                             <SignInButton mode="redirect" forceRedirectUrl="/">
