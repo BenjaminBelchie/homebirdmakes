@@ -25,10 +25,9 @@ export default function AboutPage() {
     "You can visit my Etsy shop to see other lovely makes to buy as well as read the lots of 5 star reviews I have received and am proud of.";
 
   return (
-    <div className="max-w-full">
-      <div className="flex flex-col items-center justify-center">
-        <PageHeader />
-
+    <div className="flex min-h-screen flex-col">
+      <PageHeader />
+      <div className="flex flex-1 flex-col items-center">
         <div className="flex w-full max-w-[930px] flex-col items-center justify-center">
           <h1 className="mb-[55px] mt-[55px] text-2xl">
             About
@@ -54,10 +53,8 @@ export default function AboutPage() {
             <img src="/images/Room2.jpg" alt="Studio room 2" />
           </div>
         </div>
-        <div className="mt-6">
-          <Footer />
-        </div>
       </div>
+      <Footer />
     </div>
   );
 }

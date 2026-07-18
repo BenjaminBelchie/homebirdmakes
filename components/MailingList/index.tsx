@@ -64,15 +64,15 @@ export default function MailingList(){
     return(
         <>
         <div className="mb-2">
-            <p className="text-xs text-brand-primary">Join my mailing list</p>
-            <div className="flex flex-row">
+            <p className="text-xs text-muted-foreground">Join my mailing list</p>
+            <div className="mt-3 flex flex-row">
                 <input
-                    className="w-full rounded-l rounded-r-none border border-slate-300 bg-white px-3 py-2 text-brand-primary focus:border-brand-info focus:outline-none focus:ring-2 focus:ring-brand-info/20 disabled:bg-slate-100 disabled:text-slate-400"
+                    className="w-full rounded-l-[var(--radius)] rounded-r-none border border-border bg-background px-3 py-2 text-foreground focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring/20 disabled:bg-muted disabled:text-muted-foreground"
                     disabled={loading}
                     placeholder="Email Address"
                     value={email} onChange={(e)=> {setEmail(e.target.value)}}/>
                 <button
-                    className="rounded-l-none rounded-r bg-brand-secondary px-4 py-2 text-white disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-l-none rounded-r-[var(--radius)] bg-primary px-4 py-2 text-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={!isValidEmail(email) || loading}
                     onClick={handleSubscribe}>
                         Subscribe</button>

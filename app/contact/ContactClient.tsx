@@ -46,8 +46,9 @@ export default function ContactClient() {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex min-h-screen flex-col">
       <PageHeader />
+      <div className="flex flex-1 flex-col items-center">
       <div className="mt-[55px] flex w-full max-w-[930px] flex-col items-center justify-center p-4 sm:p-8">
         <h1 className="mb-[55px] text-2xl">Contact</h1>
         <p>
@@ -171,9 +172,8 @@ export default function ContactClient() {
           </form.Subscribe>
         </form>
       </div>
-      <div className="mt-6">
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }
