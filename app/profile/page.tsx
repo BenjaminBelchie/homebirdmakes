@@ -4,7 +4,6 @@ import { useConvexAuth } from "convex/react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { HIDE_AUTH_UI } from "../../lib/site";
 
 export default function ProfilePage() {
   const { isAuthenticated, isLoading } = useConvexAuth();
@@ -12,19 +11,10 @@ export default function ProfilePage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (HIDE_AUTH_UI) {
-      router.replace("/");
-      return;
-    }
-
     if (!isLoading && !isAuthenticated) {
       router.push("/sign-in");
     }
   }, [isAuthenticated, isLoading, router]);
-
-  if (HIDE_AUTH_UI) {
-    return null;
-  }
 
   if (isLoading) {
     return (

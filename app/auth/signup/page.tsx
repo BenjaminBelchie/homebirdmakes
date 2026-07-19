@@ -1,7 +1,6 @@
 import { SignUp } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { absoluteUrl, HIDE_AUTH_UI } from "../../../lib/site";
+import { absoluteUrl } from "../../../lib/site";
 
 export const metadata: Metadata = {
   title: "Sign Up",
@@ -21,10 +20,6 @@ export const metadata: Metadata = {
 };
 
 export default function SignUpPage() {
-  if (HIDE_AUTH_UI) {
-    redirect("/");
-  }
-
   return (
     <div className="flex min-h-screen items-center justify-center p-2">
       <SignUp path="/auth/signup" routing="path" signInUrl="/auth/signin" forceRedirectUrl="/" />
