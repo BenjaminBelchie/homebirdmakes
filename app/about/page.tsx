@@ -39,7 +39,7 @@ export default function AboutPage() {
           </a>
         </div>
         <div className="overflow-hidden rounded-[var(--radius)] lg:h-96">
-          <img src="/images/ali.jpg" alt="Ali in her studio" className="h-full w-full object-cover object-[50%_60%]" />
+          <img src="/images/me.jpg" alt="Ali in her studio" className="h-full w-full object-cover object-[50%_60%]" />
         </div>
       </section>
 
