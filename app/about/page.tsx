@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Footer from "../../components/Footer";
 import PageHeader from "../../components/PageHeader";
+import Footer from "../../components/Footer";
 import { absoluteUrl } from "../../lib/site";
 
 export const metadata: Metadata = {
@@ -17,43 +17,79 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  const para1 =
-    "Hello and welcome to Homebird Makes, I'm Ali I love to design and create useful and pretty home accessories from my home studio in Staffordshire. I'm orginally from Hertfordshire but moved to the midlands after I was married over 20 years ago now.";
-  const para2 =
-    "I started sewing quite a few years ago as a hobby when my children were small, I made cushions and gifts for family and friends.  After I while I decided to open my own Etsy shop to see if any of my makes would sell. I have slowly built up my Etsy shop over the years and decided it was time to have my own website along side Etsy.";
-  const para3 =
-    "You can visit my Etsy shop to see other lovely makes to buy as well as read the lots of 5 star reviews I have received and am proud of.";
-
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background">
       <PageHeader />
-      <div className="flex flex-1 flex-col items-center">
-        <div className="flex w-full max-w-[930px] flex-col items-center justify-center">
-          <h1 className="mb-[55px] mt-[55px] text-2xl">
-            About
-          </h1>
-          <div className="flex w-full flex-col gap-2">
-            <div className="max-w-full px-8">
-              <p>{para1}</p>
-            </div>
-            <div className="max-w-full px-8">
-              <p>{para2}</p>
-            </div>
-            <div className="max-w-full px-8">
-              <p>{para3}</p>
-            </div>
-          </div>
-          <img className="mb-2 mt-4" src="/images/Ali.jpg" alt="Ali in studio" />
-          <p className="px-8">
-            My lovely work room, I am lucky to have a space to call my own.
-          </p>
 
-          <div className="mt-2 grid w-full grid-cols-1 items-center justify-center gap-2 px-8 md:grid-cols-2">
-            <img src="/images/Room1.jpg" alt="Studio room 1" />
-            <img src="/images/Room2.jpg" alt="Studio room 2" />
-          </div>
+      {/* Hero split */}
+      <section className="mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-12 px-6 py-10 lg:grid-cols-2">
+        <div>
+          <span className="text-xs tracking-[0.25em] text-muted-foreground">THE MAKER</span>
+          <h1 className="mt-3 text-5xl leading-tight sm:text-6xl">Meet<br />Ali.</h1>
+          <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+            Designer and maker of handmade home accessories, crafting from her studio in Staffordshire.
+          </p>
+          <a
+            href="https://www.etsy.com/uk/shop/homebirdmakes"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-block rounded-[var(--radius)] bg-primary px-8 py-3 text-sm text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            Visit the Etsy Shop
+          </a>
         </div>
-      </div>
+        <div className="overflow-hidden rounded-[var(--radius)] lg:h-96">
+          <img src="/images/ali.jpg" alt="Ali in her studio" className="h-full w-full object-cover object-[50%_60%]" />
+        </div>
+      </section>
+
+      <div className="h-px bg-border" />
+
+      {/* Story sections */}
+      <section className="mx-auto w-full max-w-5xl divide-y divide-border px-6">
+        <div className="grid grid-cols-1 gap-10 py-16 lg:grid-cols-2">
+          <div>
+            <span className="text-xs tracking-[0.25em] text-muted-foreground">THE BEGINNING</span>
+            <h2 className="mt-3 text-2xl">Hello &amp; welcome</h2>
+          </div>
+          <p className="self-center text-base leading-relaxed text-muted-foreground">
+            I'm Ali and I love to design and create useful and pretty home accessories from my home studio in Staffordshire. I'm originally from Hertfordshire but moved to the Midlands after I was married, over 20 years ago now.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-10 py-16 lg:grid-cols-2">
+          <div>
+            <span className="text-xs tracking-[0.25em] text-muted-foreground">THE CRAFT</span>
+            <h2 className="mt-3 text-2xl">How it started</h2>
+          </div>
+          <p className="self-center text-base leading-relaxed text-muted-foreground">
+            I started sewing quite a few years ago as a hobby when my children were small, making cushions and gifts for family and friends. After a while I decided to open my own Etsy shop to see if my makes would sell, and I've slowly built it up over the years.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-10 py-16 lg:grid-cols-2">
+          <div>
+            <span className="text-xs tracking-[0.25em] text-muted-foreground">THE SHOP</span>
+            <h2 className="mt-3 text-2xl">Find me on Etsy</h2>
+          </div>
+          <p className="self-center text-base leading-relaxed text-muted-foreground">
+            You can visit my Etsy shop to see my full range of lovely makes, and read the many 5-star reviews I've received and am really proud of.
+          </p>
+        </div>
+      </section>
+
+      <div className="h-px bg-border" />
+
+      {/* Studio photos */}
+      <section className="mx-auto w-full max-w-5xl px-6 py-16">
+        <span className="text-xs tracking-[0.25em] text-muted-foreground">THE STUDIO</span>
+        <p className="mb-8 mt-3 text-lg">My lovely workroom and I am lucky to have a space to call my own.</p>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <img src="/images/Room1.jpg" alt="Studio room 1" className="w-full rounded-[var(--radius)] object-cover" />
+          <img src="/images/Room2.jpg" alt="Studio room 2" className="w-full rounded-[var(--radius)] object-cover" />
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
