@@ -6,11 +6,13 @@ export default defineSchema({
     image: v.string(),
     category: v.string(),
     etsy_link: v.string(),
+    isFeatured: v.optional(v.boolean()),
   }).index("by_category", ["category"]),
 
   links: defineTable({
     display_text: v.string(),
     link: v.string(),
+    order: v.optional(v.number()),
   }),
 
   contactEmailEvents: defineTable({

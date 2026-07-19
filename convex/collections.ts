@@ -28,6 +28,7 @@ export const list = query({
           image,
           category: row.category,
           etsy_link: row.etsy_link,
+          isFeatured: row.isFeatured ?? false,
         };
       })
     );
@@ -39,12 +40,57 @@ export const create = mutation({
     image: v.string(),
     category: v.string(),
     etsy_link: v.string(),
+    isFeatured: v.boolean(),
   },
   handler: async (ctx, args) => {
-    return ctx.db.insert("collections", {
-      image: args.image,
-      category: args.category,
-      etsy_link: args.etsy_link,
+    const { isFeatured, ...rest } = args;
+    if (isFeatured) {
+      const all = await ctx.db.query("collections").collect();
+      await Promise.all(
+        all
+          .filter((row) => row.isFeatured)
+          .map((row) => ctx.db.patch(row._id, { isFeatured: false }))
+      );
+    }
+    return ctx.db.insert("collections", { ...rest, isFeatured });
+  },
+});
+
+export const generateUploadUrl = mutation(async (ctx) => {
+  return await ctx.storage.generateUploadUrl();
+});
+
+export const update = mutation({
+  args: {
+    id: v.id("collections"),
+    image: v.optional(v.string()),
+    category: v.string(),
+    etsy_link: v.string(),
+    isFeatured: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const { id, image, isFeatured, ...rest } = args;
+    if (isFeatured) {
+      const all = await ctx.db.query("collections").collect();
+      await Promise.all(
+        all
+          .filter((row) => row.isFeatured && row._id !== id)
+          .map((row) => ctx.db.patch(row._id, { isFeatured: false }))
+      );
+    }
+    await ctx.db.patch(id, {
+      ...rest,
+      isFeatured,
+      ...(image !== undefined ? { image } : {}),
     });
+  },
+});
+
+export const remove = mutation({
+  args: {
+    id: v.id("collections"),
+  },
+  handler: async (ctx, { id }) => {
+    await ctx.db.delete(id);
   },
 });

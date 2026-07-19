@@ -27,7 +27,8 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const collections = await fetchQuery(api.collections.list);
 
-  const [featured, ...rest] = collections;
+  const featured = collections.find((c) => c.isFeatured) ?? null;
+  const rest = featured ? collections.filter((c) => !c.isFeatured) : collections;
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
