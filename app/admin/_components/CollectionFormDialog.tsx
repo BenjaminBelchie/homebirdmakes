@@ -125,7 +125,7 @@ export function CollectionFormDialog({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="border-border relative flex h-40 w-full cursor-pointer items-center justify-center overflow-hidden rounded-md border border-dashed transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="border-border relative flex h-40 w-full cursor-pointer items-center justify-center overflow-hidden rounded-md border border-dashed transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {displayImage ? (
                 <>

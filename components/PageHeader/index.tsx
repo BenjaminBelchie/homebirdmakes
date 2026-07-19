@@ -8,14 +8,7 @@ export default function PageHeader() {
       </Link>
       <nav className="mt-5 flex items-center gap-6 text-sm text-muted-foreground">
         <Link href="/" className="transition-colors hover:text-foreground">Home</Link>
-        <a
-          href="https://www.etsy.com/uk/shop/homebirdmakes"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="transition-colors hover:text-foreground"
-        >
-          Shop
-        </a>
+        <Link href="/store" className="transition-colors hover:text-foreground">Shop</Link>
         <Link href="/about" className="transition-colors hover:text-foreground">About</Link>
         <Link href="/contact" className="transition-colors hover:text-foreground">Contact</Link>
       </nav>

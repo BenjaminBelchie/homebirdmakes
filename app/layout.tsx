@@ -7,6 +7,7 @@ import "../styles/globals.css";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 import { Arvo, JetBrains_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { initFlagsmith } from "../lib/flagsmith";
 
 const jetBrainsMono = JetBrains_Mono({subsets:['latin'], weight: ['400', '700'], variable:'--font-mono'});
 
@@ -52,7 +53,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -75,6 +76,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     ],
   };
 
+  const flagsmith = await initFlagsmith();
+  const serverState = flagsmith.getState();
+
   return (
     <html lang="en" className={cn("font-sans", arvo.variable, jetBrainsMono.variable)}>
       <body>
@@ -95,7 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
           </Script>
           <ConvexClientProvider>
-            <Providers>{children}</Providers>
+            <Providers serverState={serverState}>{children}</Providers>
           </ConvexClientProvider>
         </ClerkProvider>
       </body>

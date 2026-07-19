@@ -6,6 +6,7 @@ import InstagramCarousel from "../components/InstagramCarousel";
 import Link from "next/link";
 import Footer from "../components/Footer";
 import { SITE_DESCRIPTION, absoluteUrl } from "../lib/site";
+import { initFlagsmith } from "../lib/flagsmith";
 
 export const metadata: Metadata = {
   title: "Handmade Home Accessories",
@@ -25,6 +26,9 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
+  const flagsmith = await initFlagsmith();
+  console.log("Flagsmith flags:", flagsmith.getAllFlags());
+
   const collections = await fetchQuery(api.collections.list);
 
   const featured = collections.find((c) => c.isFeatured) ?? null;
@@ -39,8 +43,7 @@ export default async function HomePage() {
         </Link>
         <nav className="mt-5 flex items-center gap-6 text-sm text-muted-foreground">
           <Link href="/" className="transition-colors hover:text-foreground">Home</Link>
-          <a href="https://www.etsy.com/uk/shop/homebirdmakes" target="_blank" rel="noopener noreferrer"
-             className="transition-colors hover:text-foreground">Shop</a>
+          <Link href="/store" className="transition-colors hover:text-foreground">Shop</Link>
           <Link href="/about" className="transition-colors hover:text-foreground">About</Link>
           <Link href="/contact" className="transition-colors hover:text-foreground">Contact</Link>
         </nav>
