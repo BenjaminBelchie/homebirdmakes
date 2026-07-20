@@ -11,6 +11,8 @@
 import type * as collections from "../collections.js";
 import type * as http from "../http.js";
 import type * as links from "../links.js";
+import type * as orders from "../orders.js";
+import type * as products from "../products.js";
 import type * as resend from "../resend.js";
 
 import type {
@@ -23,6 +25,8 @@ declare const fullApi: ApiFromModules<{
   collections: typeof collections;
   http: typeof http;
   links: typeof links;
+  orders: typeof orders;
+  products: typeof products;
   resend: typeof resend;
 }>;
 

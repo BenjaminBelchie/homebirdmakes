@@ -7,6 +7,8 @@ import Link from "next/link";
 import Footer from "../components/Footer";
 import { SITE_DESCRIPTION, absoluteUrl } from "../lib/site";
 import { initFlagsmith } from "../lib/flagsmith";
+import CartDrawer from "../components/CartDrawer";
+import UserNav from "../components/UserNav";
 
 export const metadata: Metadata = {
   title: "Handmade Home Accessories",
@@ -46,6 +48,8 @@ export default async function HomePage() {
           <Link href="/store" className="transition-colors hover:text-foreground">Shop</Link>
           <Link href="/about" className="transition-colors hover:text-foreground">About</Link>
           <Link href="/contact" className="transition-colors hover:text-foreground">Contact</Link>
+          <UserNav />
+          <CartDrawer />
         </nav>
         <div className="mt-5 h-px w-full bg-border" />
       </header>

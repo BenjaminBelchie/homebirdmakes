@@ -1,4 +1,6 @@
 import Link from "next/link";
+import CartDrawer from "../CartDrawer";
+import UserNav from "../UserNav";
 
 export default function PageHeader() {
   return (
@@ -11,6 +13,8 @@ export default function PageHeader() {
         <Link href="/store" className="transition-colors hover:text-foreground">Shop</Link>
         <Link href="/about" className="transition-colors hover:text-foreground">About</Link>
         <Link href="/contact" className="transition-colors hover:text-foreground">Contact</Link>
+        <UserNav />
+        <CartDrawer />
       </nav>
       <div className="mt-5 h-px w-full bg-border" />
     </header>

@@ -23,4 +23,26 @@ export default defineSchema({
   })
     .index("by_email_id", ["emailId"])
     .index("by_event_type", ["eventType"]),
+
+  products: defineTable({
+    stripeProductId: v.string(),
+    featured: v.boolean(),
+    displayOrder: v.number(),
+    slug: v.optional(v.string()),
+  }).index("by_stripeProductId", ["stripeProductId"]),
+
+  orders: defineTable({
+    stripeSessionId: v.string(),
+    stripePaymentIntentId: v.optional(v.string()),
+    customerEmail: v.optional(v.string()),
+    customerName: v.optional(v.string()),
+    clerkUserId: v.optional(v.string()),
+    amountTotal: v.number(),
+    currency: v.string(),
+    shippingAddress: v.optional(v.any()),
+    status: v.string(),
+    createdAt: v.number(),
+  })
+    .index("by_stripeSessionId", ["stripeSessionId"])
+    .index("by_clerkUserId", ["clerkUserId"]),
 });

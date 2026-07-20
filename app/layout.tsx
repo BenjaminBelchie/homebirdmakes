@@ -1,4 +1,5 @@
 import {ClerkProvider} from "@clerk/nextjs";
+import { shadcn } from "@clerk/ui/themes";
 import type { Metadata } from "next";
 import Script from "next/script";
 import Providers from "./providers";
@@ -82,7 +83,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={cn("font-sans", arvo.variable, jetBrainsMono.variable)}>
       <body>
-        <ClerkProvider>
+        <ClerkProvider >
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
           <Script
           strategy="lazyOnload"
