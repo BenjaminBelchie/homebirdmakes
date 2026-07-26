@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { unstable_cache } from "next/cache";
 import type { Metadata } from "next";
-import { initFlagsmith } from "../../lib/flagsmith";
+import { auth } from "@clerk/nextjs/server";
+import { initFlagsmith, initFlagsmithForIdentity } from "../../lib/flagsmith";
 import PageHeader from "../../components/PageHeader";
 import Footer from "../../components/Footer";
 import { fetchQuery } from "convex/nextjs";
@@ -42,7 +43,10 @@ function formatPrice(price: Stripe.Price | null): string {
 }
 
 export default async function StorePage() {
-  const flagsmith = await initFlagsmith();
+  const { userId } = await auth();
+  const flagsmith = userId
+    ? await initFlagsmithForIdentity(userId)
+    : await initFlagsmith();
 
   if (!flagsmith.hasFeature("store_page")) {
     redirect(ETSY_URL);
