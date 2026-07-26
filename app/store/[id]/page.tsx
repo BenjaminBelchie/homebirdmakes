@@ -41,10 +41,10 @@ const getStripeProduct = unstable_cache(
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ productId: string }>;
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const { productId } = await params;
-  const product = await getStripeProduct(productId);
+  const { id } = await params;
+  const product = await getStripeProduct(`prod_${id}`);
   if (!product) return { title: "Product not found" };
 
   return {
@@ -59,22 +59,23 @@ export async function generateMetadata({
 export default async function ProductDetailPage({
   params,
 }: {
-  params: Promise<{ productId: string }>;
+  params: Promise<{ id: string }>;
 }) {
   const flagsmith = await initFlagsmith();
   if (!flagsmith.hasFeature("store_page")) {
     redirect(ETSY_URL);
   }
 
-  const { productId } = await params;
+  const { id } = await params;
+  const stripeId = `prod_${id}`;
   const [product, productMeta] = await Promise.all([
-    getStripeProduct(productId),
+    getStripeProduct(stripeId),
     fetchQuery(api.products.list),
   ]);
 
   if (!product || product.active === false) notFound();
 
-  const meta = productMeta.find((p) => p.stripeProductId === productId) ?? null;
+  const meta = productMeta.find((p) => p.stripeProductId === stripeId) ?? null;
   const price = product.default_price as Stripe.Price | null;
 
   return (

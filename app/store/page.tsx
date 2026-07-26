@@ -73,10 +73,11 @@ export default async function StorePage() {
             {products.map(({ stripe: product, meta }) => {
               const price = product.default_price as Stripe.Price | null;
               const image = product.images[0] ?? null;
+              const href = `/store/${product.id.replace("prod_", "")}`;
 
               return (
                 <div key={product.id} className="group flex h-full flex-col">
-                  <Link href={`/store/${product.id}`} className="relative block aspect-square overflow-hidden rounded-[var(--radius)] bg-muted shadow-sm">
+                  <Link href={href} className="relative block aspect-square overflow-hidden rounded-[var(--radius)] bg-muted shadow-sm">
                     {image && (
                       <img
                         src={image}
@@ -91,7 +92,7 @@ export default async function StorePage() {
                     )}
                   </Link>
                   <div className="mt-3 flex items-start justify-between gap-2">
-                    <Link href={`/store/${product.id}`} className="text-sm font-medium leading-snug hover:underline">{product.name}</Link>
+                    <Link href={href} className="text-sm font-medium leading-snug hover:underline">{product.name}</Link>
                     <p className="shrink-0 text-sm text-muted-foreground">{formatPrice(price)}</p>
                   </div>
                   {product.description && (
@@ -100,7 +101,7 @@ export default async function StorePage() {
                   {price?.id && price.unit_amount != null && (
                     <div className="mt-auto pt-3 flex gap-2">
                       <Link
-                        href={`/store/${product.id}`}
+                        href={href}
                         className={cn(buttonVariants({ variant: "outline", size: "sm" }), "flex-1 justify-center")}
                       >
                         Details
