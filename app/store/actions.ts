@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import stripe from "../../lib/stripe";
-import { initFlagsmith } from "../../lib/flagsmith";
+import { initFlagsmith, initFlagsmithForIdentity } from "../../lib/flagsmith";
 
 type CheckoutItem = {
   stripePriceId: string;
@@ -23,12 +23,13 @@ export async function createCheckoutSession(
   const proto = headersList.get("x-forwarded-proto") ?? "http";
   const baseUrl = `${proto}://${host}`;
 
-  const flagsmith = await initFlagsmith();
+  const { userId } = await auth();
+  const flagsmith = userId
+    ? await initFlagsmithForIdentity(userId)
+    : await initFlagsmith();
   if (!flagsmith.hasFeature("store_page")) {
     throw new Error("Store is not currently available");
   }
-
-  const { userId } = await auth();
   const user = userId ? await currentUser() : null;
   const customerEmail = user?.emailAddresses[0]?.emailAddress;
 

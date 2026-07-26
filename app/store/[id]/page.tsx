@@ -11,7 +11,8 @@ import Footer from "../../../components/Footer";
 import AddToCartButton from "../../../components/AddToCartButton";
 import ProductImageCarousel from "./ProductImageCarousel";
 import { IconArrowLeft } from "@tabler/icons-react";
-import { initFlagsmith } from "../../../lib/flagsmith";
+import { auth } from "@clerk/nextjs/server";
+import { initFlagsmith, initFlagsmithForIdentity } from "../../../lib/flagsmith";
 
 export const dynamic = "force-dynamic";
 
@@ -61,7 +62,10 @@ export default async function ProductDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const flagsmith = await initFlagsmith();
+  const { userId } = await auth();
+  const flagsmith = userId
+    ? await initFlagsmithForIdentity(userId)
+    : await initFlagsmith();
   if (!flagsmith.hasFeature("store_page")) {
     redirect(ETSY_URL);
   }
