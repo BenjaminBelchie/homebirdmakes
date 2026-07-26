@@ -8,7 +8,8 @@ import "../styles/globals.css";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from "../lib/site";
 import { Arvo, JetBrains_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { initFlagsmith } from "../lib/flagsmith";
+import { auth } from "@clerk/nextjs/server";
+import { initFlagsmith, initFlagsmithForIdentity } from "../lib/flagsmith";
 
 const jetBrainsMono = JetBrains_Mono({subsets:['latin'], weight: ['400', '700'], variable:'--font-mono'});
 
@@ -77,7 +78,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     ],
   };
 
-  const flagsmith = await initFlagsmith();
+  const { userId } = await auth();
+  const flagsmith = userId
+    ? await initFlagsmithForIdentity(userId)
+    : await initFlagsmith();
   const serverState = flagsmith.getState();
 
   return (
