@@ -34,14 +34,23 @@ import {
   IconExternalLink,
   IconPhoto,
   IconLink,
+  IconShoppingBag,
+  IconArchive,
+  IconRefresh,
 } from "@tabler/icons-react";
 import { CollectionFormDialog } from "@/app/admin/_components/CollectionFormDialog";
 import { LinkFormDialog } from "@/app/admin/_components/LinkFormDialog";
+import {
+  listAdminProducts,
+  archiveProduct,
+  restoreProduct,
+} from "@/app/admin/productActions";
+import type { AdminProduct } from "@/app/admin/productActions";
 import type { Collection, LinkItem } from "@/app/admin/_components/types";
 
 function PageContent() {
   const searchParams = useSearchParams();
-  const activeSection = searchParams.get("section") ?? "collections";
+  const activeSection = searchParams.get("section") ?? "products";
 
   const collections = useQuery(api.collections.list);
   const links = useQuery(api.links.list);
@@ -67,6 +76,30 @@ function PageContent() {
     open: false,
   });
   const [deletingLink, setDeletingLink] = useState<LinkItem | null>(null);
+
+  // Products — loaded via server action (Stripe + Convex merge)
+  const [products, setProducts] = useState<AdminProduct[] | undefined>(undefined);
+  const [productsLoading, setProductsLoading] = useState(false);
+  const [archivingProduct, setArchivingProduct] = useState<AdminProduct | null>(null);
+  const [restoringProduct, setRestoringProduct] = useState<AdminProduct | null>(null);
+
+  async function loadProducts() {
+    setProductsLoading(true);
+    try {
+      const data = await listAdminProducts();
+      setProducts(data);
+    } finally {
+      setProductsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (activeSection === "products" && products === undefined) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      void loadProducts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSection]);
 
   return (
     <div className="w-full px-6 py-6">
@@ -253,6 +286,113 @@ function PageContent() {
         </section>
       )}
 
+      {activeSection === "products" && (
+        <section>
+          <div className="mb-7 flex items-center justify-between">
+            <h2 className="text-foreground text-lg font-semibold">Products</h2>
+            <div className="flex items-center gap-2">
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                onClick={() => void loadProducts()}
+                disabled={productsLoading}
+                aria-label="Refresh products"
+              >
+                <IconRefresh className={`size-4 ${productsLoading ? "animate-spin" : ""}`} />
+              </Button>
+              <Button size="sm" nativeButton={false} render={<Link href="/admin/products/new" />}>
+                <IconPlus className="size-4" />
+                Add Product
+              </Button>
+            </div>
+          </div>
+
+          {productsLoading && products === undefined ? (
+            <div className="flex flex-col gap-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-20 w-full rounded-xl" />
+              ))}
+            </div>
+          ) : products?.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
+              <IconShoppingBag className="size-10 text-muted-foreground/40" />
+              <p className="text-muted-foreground text-sm">No products yet.</p>
+              <Button size="sm" nativeButton={false} render={<Link href="/admin/products/new" />}>
+                <IconPlus className="size-4" /> Add your first product
+              </Button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {products?.map((product) => (
+                <div
+                  key={product.stripeProductId}
+                  className={`border rounded-xl p-4 flex items-center gap-4 transition-colors ${
+                    product.active
+                      ? "border-border bg-card hover:border-ring/50"
+                      : "border-border/50 bg-muted/30 opacity-60"
+                  }`}
+                >
+                  <div className="h-14 w-14 rounded-lg overflow-hidden shrink-0 border border-border bg-muted flex items-center justify-center">
+                    {product.images[0] ? (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <IconShoppingBag className="size-6 text-muted-foreground/40" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-foreground font-medium text-sm">{product.name}</span>
+                      {!product.active && <Badge variant="outline" className="text-xs">Archived</Badge>}
+                      {product.featured && <Badge className="text-xs">Featured</Badge>}
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
+                      {product.priceInPence != null
+                        ? `£${(product.priceInPence / 100).toFixed(2)}`
+                        : "No price set"}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <Button
+                      size="icon-sm"
+                      variant="ghost"
+                      nativeButton={false}
+                      render={<Link href={`/admin/products/${product.stripeProductId}/edit`} />}
+                    >
+                      <IconPencil className="size-4" />
+                      <span className="sr-only">Edit</span>
+                    </Button>
+                    {product.active ? (
+                      <Button
+                        size="icon-sm"
+                        variant="ghost"
+                        className="text-destructive hover:text-destructive"
+                        onClick={() => setArchivingProduct(product)}
+                      >
+                        <IconArchive className="size-4" />
+                        <span className="sr-only">Archive</span>
+                      </Button>
+                    ) : (
+                      <Button
+                        size="icon-sm"
+                        variant="ghost"
+                        onClick={() => setRestoringProduct(product)}
+                      >
+                        <IconRefresh className="size-4" />
+                        <span className="sr-only">Restore</span>
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
       </div>
 
       <CollectionFormDialog
@@ -318,6 +458,66 @@ function PageContent() {
               }}
             >
               Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={archivingProduct !== null}
+        onOpenChange={(open) => { if (!open) setArchivingProduct(null); }}
+      >
+        <AlertDialogContent size="sm">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Archive product?</AlertDialogTitle>
+            <AlertDialogDescription>
+              &quot;{archivingProduct?.name}&quot; will be deactivated in Stripe and removed from the store. You can restore it later.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={async () => {
+                if (archivingProduct) {
+                  await archiveProduct({
+                    stripeProductId: archivingProduct.stripeProductId,
+                    convexId: archivingProduct.convexId,
+                  });
+                  setArchivingProduct(null);
+                  void loadProducts();
+                }
+              }}
+            >
+              Archive
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={restoringProduct !== null}
+        onOpenChange={(open) => { if (!open) setRestoringProduct(null); }}
+      >
+        <AlertDialogContent size="sm">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Restore product?</AlertDialogTitle>
+            <AlertDialogDescription>
+              &quot;{restoringProduct?.name}&quot; will be reactivated in Stripe and appear in the store again.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={async () => {
+                if (restoringProduct) {
+                  await restoreProduct(restoringProduct.stripeProductId);
+                  setRestoringProduct(null);
+                  void loadProducts();
+                }
+              }}
+            >
+              Restore
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

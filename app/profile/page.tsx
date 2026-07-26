@@ -3,12 +3,13 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useConvexAuth, useQuery } from "convex/react";
-import { useUser, useClerk } from "@clerk/nextjs";
+import { useUser, useClerk, useAuth } from "@clerk/nextjs";
 import { useFlags } from "@flagsmith/flagsmith/react";
 import { api } from "../../convex/_generated/api";
 import PageHeader from "../../components/PageHeader";
 import Footer from "../../components/Footer";
-import { IconPackage, IconSettings } from "@tabler/icons-react";
+import { IconPackage, IconSettings, IconShield } from "@tabler/icons-react";
+import Link from "next/link";
 
 type CartItemMeta = { n: string; q: number; a: number };
 
@@ -21,6 +22,8 @@ export default function ProfilePage() {
   const { isAuthenticated, isLoading } = useConvexAuth();
   const { user } = useUser();
   const { openUserProfile } = useClerk();
+  const { sessionClaims } = useAuth();
+  const isAdmin = sessionClaims?.metadata?.role === "admin";
   const router = useRouter();
   const flags = useFlags(["store_page"]);
   const orders = useQuery(api.orders.listForUser);
@@ -57,14 +60,25 @@ export default function ProfilePage() {
               </p>
             </div>
           </div>
-          <button
-            onClick={() => openUserProfile()}
-            aria-label="Account settings"
-            className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <IconSettings size={16} />
-            Settings
-          </button>
+          <div className="flex items-center gap-3">
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <IconShield size={16} />
+                Admin
+              </Link>
+            )}
+            <button
+              onClick={() => openUserProfile()}
+              aria-label="Account settings"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <IconSettings size={16} />
+              Settings
+            </button>
+          </div>
         </section>
 
         <div className="my-8 h-px w-full bg-border" />

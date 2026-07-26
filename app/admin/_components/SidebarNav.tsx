@@ -15,13 +15,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { IconLink, IconPhoto } from "@tabler/icons-react";
+import { IconLink, IconPhoto, IconShoppingBag } from "@tabler/icons-react";
 
 function Nav() {
   const searchParams = useSearchParams();
   const section = searchParams.get("section") ?? "collections";
   const collections = useQuery(api.collections.list);
   const links = useQuery(api.links.list);
+  const products = useQuery(api.products.list);
   const { isMobile, setOpenMobile } = useSidebar();
 
   function handleNavClick() {
@@ -33,6 +34,20 @@ function Nav() {
       <SidebarGroupLabel>Content</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              isActive={section === "products"}
+              tooltip="Products"
+              render={<Link href="/admin?section=products" />}
+              onClick={handleNavClick}
+            >
+              <IconShoppingBag />
+              <span>Products</span>
+            </SidebarMenuButton>
+            {products !== undefined && (
+              <SidebarMenuBadge>{products.length}</SidebarMenuBadge>
+            )}
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               isActive={section === "collections"}

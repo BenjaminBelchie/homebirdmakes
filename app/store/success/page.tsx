@@ -7,7 +7,14 @@ import { IconCircleCheckFilled } from "@tabler/icons-react";
 
 export const metadata: Metadata = { title: "Order confirmed" };
 
-export default function StoreSuccessPage() {
+export default async function StoreSuccessPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ session_id?: string }>;
+}) {
+  const { session_id } = await searchParams;
+  const orderNumber = session_id ? session_id.slice(-8).toUpperCase() : null;
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <PageHeader />
@@ -16,6 +23,11 @@ export default function StoreSuccessPage() {
       <section className="flex flex-1 flex-col items-center justify-center px-6 py-20 text-center">
         <IconCircleCheckFilled size={48} className="text-primary" />
         <h1 className="mt-4 text-2xl font-medium">Order confirmed!</h1>
+        {orderNumber && (
+          <p className="mt-1 text-sm font-medium text-muted-foreground">
+            Order #{orderNumber}
+          </p>
+        )}
         <p className="mt-2 max-w-sm text-sm text-muted-foreground">
           Thank you for your order. You'll receive a confirmation email shortly.
         </p>

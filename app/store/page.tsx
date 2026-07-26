@@ -8,7 +8,10 @@ import { fetchQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 import stripe from "../../lib/stripe";
 import type Stripe from "stripe";
+import Link from "next/link";
 import AddToCartButton from "../../components/AddToCartButton";
+import { buttonVariants } from "../../components/ui/button";
+import { cn } from "../../lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -66,14 +69,14 @@ export default async function StorePage() {
         {products.length === 0 ? (
           <p className="text-center text-sm text-muted-foreground">No products available yet.</p>
         ) : (
-          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 lg:grid-cols-3">
+          <div className="mx-auto grid max-w-5xl grid-cols-2 items-stretch gap-6 lg:grid-cols-3">
             {products.map(({ stripe: product, meta }) => {
               const price = product.default_price as Stripe.Price | null;
               const image = product.images[0] ?? null;
 
               return (
-                <div key={product.id} className="group flex flex-col">
-                  <div className="relative aspect-square overflow-hidden rounded-[var(--radius)] bg-muted shadow-sm">
+                <div key={product.id} className="group flex h-full flex-col">
+                  <Link href={`/store/${product.id}`} className="relative block aspect-square overflow-hidden rounded-[var(--radius)] bg-muted shadow-sm">
                     {image && (
                       <img
                         src={image}
@@ -86,24 +89,32 @@ export default async function StorePage() {
                         FEATURED
                       </span>
                     )}
-                  </div>
+                  </Link>
                   <div className="mt-3 flex items-start justify-between gap-2">
-                    <p className="text-sm font-medium leading-snug">{product.name}</p>
+                    <Link href={`/store/${product.id}`} className="text-sm font-medium leading-snug hover:underline">{product.name}</Link>
                     <p className="shrink-0 text-sm text-muted-foreground">{formatPrice(price)}</p>
                   </div>
                   {product.description && (
                     <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{product.description}</p>
                   )}
                   {price?.id && price.unit_amount != null && (
-                    <div className="mt-3">
-                      <AddToCartButton
-                        stripePriceId={price.id}
-                        stripeProductId={product.id}
-                        name={product.name}
-                        image={image}
-                        unitAmount={price.unit_amount}
-                        currency={price.currency}
-                      />
+                    <div className="mt-auto pt-3 flex gap-2">
+                      <Link
+                        href={`/store/${product.id}`}
+                        className={cn(buttonVariants({ variant: "outline", size: "sm" }), "flex-1 justify-center")}
+                      >
+                        Details
+                      </Link>
+                      <div className="flex-1">
+                        <AddToCartButton
+                          stripePriceId={price.id}
+                          stripeProductId={product.id}
+                          name={product.name}
+                          image={image}
+                          unitAmount={price.unit_amount}
+                          currency={price.currency}
+                        />
+                      </div>
                     </div>
                   )}
                 </div>

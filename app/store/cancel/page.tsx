@@ -15,7 +15,7 @@ export default function StoreCancelPage() {
         <IconShoppingBag size={48} strokeWidth={1.25} className="text-muted-foreground" />
         <h1 className="mt-4 text-2xl font-medium">Checkout cancelled</h1>
         <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-          No worries — your bag has been saved. Come back whenever you're ready.
+          Your bag has been saved. Come back whenever you're ready.
         </p>
         <Link
           href="/store"
