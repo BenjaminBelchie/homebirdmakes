@@ -10,6 +10,7 @@ type CheckoutItem = {
   quantity: number;
   name: string;
   unitAmount: number;
+  image: string | null;
 };
 
 export async function createCheckoutSession(
@@ -47,7 +48,7 @@ export async function createCheckoutSession(
     metadata: {
       clerkUserId: userId ?? "",
       items: JSON.stringify(
-        items.map((i) => ({ n: i.name, q: i.quantity, a: i.unitAmount }))
+        items.map((i) => ({ n: i.name, q: i.quantity, a: i.unitAmount, i: i.image ?? undefined }))
       ),
     },
     success_url: `${baseUrl}/store/success?session_id={CHECKOUT_SESSION_ID}`,

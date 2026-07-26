@@ -11,7 +11,7 @@ import Footer from "../../components/Footer";
 import { IconPackage, IconSettings, IconShield } from "@tabler/icons-react";
 import Link from "next/link";
 
-type CartItemMeta = { n: string; q: number; a: number };
+type CartItemMeta = { n: string; q: number; a: number; i?: string };
 
 function formatPrice(unitAmount: number, currency: string) {
   const symbol = currency === "gbp" ? "£" : currency.toUpperCase() + " ";
@@ -44,15 +44,15 @@ export default function ProfilePage() {
 
         {/* Account header */}
         <section className="flex items-center justify-between gap-5">
-          <div className="flex items-center gap-5">
+          <div className="flex min-w-0 items-center gap-4">
             <img
               src={user.imageUrl}
               alt={user.fullName ?? "Profile picture"}
-              className="h-16 w-16 rounded-full object-cover"
+              className="h-12 w-12 shrink-0 rounded-full object-cover"
             />
-            <div>
+            <div className="min-w-0">
               <h1 className="text-xl font-medium">{user.fullName}</h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="truncate text-sm text-muted-foreground">
                 {user.primaryEmailAddress?.emailAddress}
               </p>
               <p className="mt-0.5 text-xs text-muted-foreground">
@@ -60,23 +60,22 @@ export default function ProfilePage() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-3">
             {isAdmin && (
               <Link
                 href="/admin"
-                className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                aria-label="Admin"
+                className="text-muted-foreground transition-colors hover:text-foreground"
               >
-                <IconShield size={16} />
-                Admin
+                <IconShield size={18} />
               </Link>
             )}
             <button
               onClick={() => openUserProfile()}
               aria-label="Account settings"
-              className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="text-muted-foreground transition-colors hover:text-foreground"
             >
-              <IconSettings size={16} />
-              Settings
+              <IconSettings size={18} />
             </button>
           </div>
         </section>
@@ -113,41 +112,50 @@ export default function ProfilePage() {
 
                 return (
                   <li key={order._id} className="rounded-[var(--radius)] border bg-card p-5">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-xs text-muted-foreground">
-                          {new Date(order.createdAt).toLocaleDateString("en-GB", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })}
-                        </p>
-                        {items.length > 0 ? (
-                          <ul className="mt-1.5 space-y-0.5">
-                            {items.map((item, idx) => (
-                              <li key={idx} className="text-sm">
-                                {item.n}
-                                {item.q > 1 && (
-                                  <span className="text-muted-foreground"> ×{item.q}</span>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p className="mt-1 text-sm text-muted-foreground">
-                            Order #{order.stripeSessionId.slice(-8).toUpperCase()}
-                          </p>
-                        )}
-                      </div>
-                      <div className="text-right">
+                    <div className="mb-4 flex items-center justify-between gap-4">
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(order.createdAt).toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </p>
+                      <div className="flex items-center gap-3">
                         <p className="font-medium">
                           {formatPrice(order.amountTotal, order.currency)}
                         </p>
-                        <span className="mt-1 inline-block rounded-full bg-primary/20 px-2 py-0.5 text-[10px] tracking-wide text-foreground">
+                        <span className="inline-block rounded-full bg-primary/20 px-2 py-0.5 text-[10px] tracking-wide text-foreground">
                           {order.status.toUpperCase()}
                         </span>
                       </div>
                     </div>
+                    {items.length > 0 ? (
+                      <ul className="space-y-3">
+                        {items.map((item, idx) => (
+                          <li key={idx} className="flex items-center gap-3">
+                            {item.i ? (
+                              <img
+                                src={item.i}
+                                alt={item.n}
+                                className="h-14 w-14 flex-shrink-0 rounded-[calc(var(--radius)-2px)] object-cover"
+                              />
+                            ) : (
+                              <div className="h-14 w-14 flex-shrink-0 rounded-[calc(var(--radius)-2px)] bg-muted" />
+                            )}
+                            <div className="min-w-0">
+                              <p className="truncate text-sm">{item.n}</p>
+                              {item.q > 1 && (
+                                <p className="text-xs text-muted-foreground">Qty: {item.q}</p>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        Order #{order.stripeSessionId.slice(-8).toUpperCase()}
+                      </p>
+                    )}
                   </li>
                 );
               })}

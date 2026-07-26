@@ -50,6 +50,7 @@ export const create = internalMutation({
       shippingAddress: args.shippingAddress ?? undefined,
       status: "paid",
       createdAt: Date.now(),
+      itemsMetadata: args.itemsMetadata,
     });
 
     if (!args.customerEmail) return;

@@ -35,6 +35,7 @@ export default function CartDrawer() {
         quantity: i.quantity,
         name: i.name,
         unitAmount: i.unitAmount,
+        image: i.image,
       }));
       const { url } = await createCheckoutSession(lineItems);
       window.location.href = url;

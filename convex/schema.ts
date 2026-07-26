@@ -42,6 +42,7 @@ export default defineSchema({
     shippingAddress: v.optional(v.any()),
     status: v.string(),
     createdAt: v.number(),
+    itemsMetadata: v.optional(v.string()),
   })
     .index("by_stripeSessionId", ["stripeSessionId"])
     .index("by_clerkUserId", ["clerkUserId"]),
