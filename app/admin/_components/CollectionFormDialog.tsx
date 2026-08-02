@@ -70,21 +70,12 @@ export function CollectionFormDialog({
       let publicUrl: string | undefined;
 
       if (pendingFile) {
-        const res = await fetch("/api/r2/upload-url", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileName: pendingFile.name, contentType: pendingFile.type }),
-        });
-        if (!res.ok) throw new Error("Failed to get upload URL");
-        const { uploadUrl, publicUrl: url } = await res.json() as { uploadUrl: string; publicUrl: string };
-
-        const upload = await fetch(uploadUrl, {
-          method: "PUT",
-          headers: { "Content-Type": pendingFile.type },
-          body: pendingFile,
-        });
-        if (!upload.ok) throw new Error("Failed to upload image");
-        publicUrl = url;
+        const form = new FormData();
+        form.append("file", pendingFile);
+        form.append("folder", "collections");
+        const res = await fetch("/api/r2/upload", { method: "POST", body: form });
+        if (!res.ok) throw new Error("Failed to upload image");
+        ({ publicUrl } = await res.json() as { publicUrl: string });
       }
 
       if (initial) {

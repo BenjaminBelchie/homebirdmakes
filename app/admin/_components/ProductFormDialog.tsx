@@ -93,20 +93,12 @@ export function ProductFormDialog({
 
       const newImageUrls: string[] = [];
       for (const { file } of pendingFiles) {
-        const res = await fetch("/api/r2/upload-url", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ fileName: file.name, contentType: file.type }),
-        });
-        if (!res.ok) throw new Error("Failed to get upload URL");
-        const { uploadUrl, publicUrl } = await res.json() as { uploadUrl: string; publicUrl: string };
-
-        const upload = await fetch(uploadUrl, {
-          method: "PUT",
-          headers: { "Content-Type": file.type },
-          body: file,
-        });
-        if (!upload.ok) throw new Error("Failed to upload image");
+        const form = new FormData();
+        form.append("file", file);
+        form.append("folder", "products");
+        const res = await fetch("/api/r2/upload", { method: "POST", body: form });
+        if (!res.ok) throw new Error("Failed to upload image");
+        const { publicUrl } = await res.json() as { publicUrl: string };
         newImageUrls.push(publicUrl);
       }
 

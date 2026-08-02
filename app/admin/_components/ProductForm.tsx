@@ -106,20 +106,12 @@ export function ProductForm({ initial }: { initial?: AdminProduct }) {
       const pendingUploads = new Map<File, string>(); // file → public URL
       for (const img of images) {
         if (img.type === "pending") {
-          const res = await fetch("/api/r2/upload-url", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ fileName: img.file.name, contentType: img.file.type }),
-          });
-          if (!res.ok) throw new Error("Failed to get upload URL");
-          const { uploadUrl, publicUrl } = await res.json() as { uploadUrl: string; publicUrl: string };
-
-          const upload = await fetch(uploadUrl, {
-            method: "PUT",
-            headers: { "Content-Type": img.file.type },
-            body: img.file,
-          });
-          if (!upload.ok) throw new Error("Failed to upload image");
+          const form = new FormData();
+          form.append("file", img.file);
+          form.append("folder", "products");
+          const res = await fetch("/api/r2/upload", { method: "POST", body: form });
+          if (!res.ok) throw new Error("Failed to upload image");
+          const { publicUrl } = await res.json() as { publicUrl: string };
           pendingUploads.set(img.file, publicUrl);
         }
       }
