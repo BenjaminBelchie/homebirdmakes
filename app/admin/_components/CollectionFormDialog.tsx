@@ -37,7 +37,6 @@ export function CollectionFormDialog({
   onOpenChange: (open: boolean) => void;
   initial?: Collection;
 }) {
-  const generateUploadUrl = useMutation(api.collections.generateUploadUrl);
   const createCollection = useMutation(api.collections.create);
   const updateCollection = useMutation(api.collections.update);
 
@@ -68,17 +67,24 @@ export function CollectionFormDialog({
       isFeatured: initial?.isFeatured ?? false,
     },
     onSubmit: async ({ value }) => {
-      let storageId: string | undefined;
+      let publicUrl: string | undefined;
 
       if (pendingFile) {
-        const uploadUrl = await generateUploadUrl();
-        const response = await fetch(uploadUrl, {
+        const res = await fetch("/api/r2/upload-url", {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fileName: pendingFile.name, contentType: pendingFile.type }),
+        });
+        if (!res.ok) throw new Error("Failed to get upload URL");
+        const { uploadUrl, publicUrl: url } = await res.json() as { uploadUrl: string; publicUrl: string };
+
+        const upload = await fetch(uploadUrl, {
+          method: "PUT",
           headers: { "Content-Type": pendingFile.type },
           body: pendingFile,
         });
-        const json = await response.json();
-        storageId = json.storageId as string;
+        if (!upload.ok) throw new Error("Failed to upload image");
+        publicUrl = url;
       }
 
       if (initial) {
@@ -87,12 +93,12 @@ export function CollectionFormDialog({
           category: value.category,
           etsy_link: value.etsyLink,
           isFeatured: value.isFeatured,
-          ...(storageId !== undefined && { image: storageId }),
+          ...(publicUrl !== undefined && { image: publicUrl }),
         });
       } else {
         await createCollection({
           category: value.category,
-          image: storageId!,
+          image: publicUrl!,
           etsy_link: value.etsyLink,
           isFeatured: value.isFeatured,
         });

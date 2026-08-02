@@ -47,6 +47,8 @@ import {
 } from "@/app/admin/productActions";
 import type { AdminProduct } from "@/app/admin/productActions";
 import type { Collection, LinkItem } from "@/app/admin/_components/types";
+import { migrateCollectionsToR2 } from "@/app/admin/migrateCollectionsToR2";
+import type { MigrationResult } from "@/app/admin/migrateCollectionsToR2";
 
 function PageContent() {
   const searchParams = useSearchParams();
@@ -72,6 +74,8 @@ function PageContent() {
     open: false,
   });
   const [deletingCollection, setDeletingCollection] = useState<Collection | null>(null);
+  const [migrating, setMigrating] = useState(false);
+  const [migrationResult, setMigrationResult] = useState<MigrationResult | null>(null);
   const [linkDialog, setLinkDialog] = useState<{ open: boolean; item?: LinkItem }>({
     open: false,
   });
@@ -118,11 +122,45 @@ function PageContent() {
         <section>
           <div className="mb-7 flex items-center justify-between">
             <h2 className="text-foreground text-lg font-semibold">Collections</h2>
-            <Button size="sm" onClick={() => setCollectionDialog({ open: true })}>
-              <IconPlus className="size-4" />
-              Add Collection
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={migrating}
+                onClick={async () => {
+                  setMigrating(true);
+                  setMigrationResult(null);
+                  try {
+                    const result = await migrateCollectionsToR2();
+                    setMigrationResult(result);
+                  } finally {
+                    setMigrating(false);
+                  }
+                }}
+              >
+                {migrating ? "Migrating…" : "Migrate to R2"}
+              </Button>
+              <Button size="sm" onClick={() => setCollectionDialog({ open: true })}>
+                <IconPlus className="size-4" />
+                Add Collection
+              </Button>
+            </div>
           </div>
+
+          {migrationResult && (
+            <div className="mb-4 rounded-lg border border-border bg-muted/50 p-3 text-sm">
+              <p className="font-medium">Migration complete</p>
+              <p className="text-muted-foreground">
+                {migrationResult.migrated} migrated · {migrationResult.skipped} already on R2
+                {migrationResult.errors.length > 0 && (
+                  <span className="text-destructive"> · {migrationResult.errors.length} errors</span>
+                )}
+              </p>
+              {migrationResult.errors.map((e, i) => (
+                <p key={i} className="mt-1 text-xs text-destructive">{e}</p>
+              ))}
+            </div>
+          )}
 
           {collections === undefined ? (
             <div className="flex flex-col gap-3">
