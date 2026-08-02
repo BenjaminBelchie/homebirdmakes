@@ -91,18 +91,14 @@ export async function createProduct(data: {
   name: string;
   description: string;
   priceInPence: number;
-  orderedImages: Array<{ type: "new"; storageId: string }>;
+  orderedImages: Array<{ type: "new"; url: string }>;
   featured: boolean;
   displayOrder: number;
   slug?: string;
 }): Promise<void> {
   await requireAdmin();
 
-  const imageUrls: string[] = [];
-  for (const img of data.orderedImages) {
-    const url = await fetchQuery(api.products.resolveImageUrl, { storageId: img.storageId });
-    if (url) imageUrls.push(url);
-  }
+  const imageUrls = data.orderedImages.map((img) => img.url);
 
   const product = await stripe.products.create({
     name: data.name,
@@ -135,22 +131,14 @@ export async function updateProduct(data: {
   priceInPence: number;
   currentPriceInPence: number | null;
   currentPriceId: string | null;
-  orderedImages: Array<{ type: "existing"; url: string } | { type: "new"; storageId: string }>;
+  orderedImages: Array<{ type: "existing"; url: string } | { type: "new"; url: string }>;
   featured: boolean;
   displayOrder: number;
   slug?: string;
 }): Promise<void> {
   await requireAdmin();
 
-  const finalImages: string[] = [];
-  for (const img of data.orderedImages) {
-    if (img.type === "existing") {
-      finalImages.push(img.url);
-    } else {
-      const url = await fetchQuery(api.products.resolveImageUrl, { storageId: img.storageId });
-      if (url) finalImages.push(url);
-    }
-  }
+  const finalImages = data.orderedImages.map((img) => img.url);
 
   await stripe.products.update(data.stripeProductId, {
     name: data.name,

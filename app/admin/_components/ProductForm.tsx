@@ -3,8 +3,6 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "@tanstack/react-form";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -59,7 +57,6 @@ function toSlug(name: string) {
 
 export function ProductForm({ initial }: { initial?: AdminProduct }) {
   const router = useRouter();
-  const generateUploadUrl = useMutation(api.products.generateUploadUrl);
 
   // Unified ordered image list — preserves order for drag-to-reorder
   const [images, setImages] = useState<ImageEntry[]>(
@@ -105,25 +102,32 @@ export function ProductForm({ initial }: { initial?: AdminProduct }) {
       const priceInPence = gbpToPence(value.priceGBP);
       if (!priceInPence) return;
 
-      // Upload all pending files (preserving their position in the ordered list)
-      const pendingUploads = new Map<File, string>(); // file → storageId
+      // Upload all pending files to R2 (preserving their position in the ordered list)
+      const pendingUploads = new Map<File, string>(); // file → public URL
       for (const img of images) {
         if (img.type === "pending") {
-          const uploadUrl = await generateUploadUrl();
-          const res = await fetch(uploadUrl, {
+          const res = await fetch("/api/r2/upload-url", {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fileName: img.file.name, contentType: img.file.type }),
+          });
+          if (!res.ok) throw new Error("Failed to get upload URL");
+          const { uploadUrl, publicUrl } = await res.json() as { uploadUrl: string; publicUrl: string };
+
+          const upload = await fetch(uploadUrl, {
+            method: "PUT",
             headers: { "Content-Type": img.file.type },
             body: img.file,
           });
-          const json = (await res.json()) as { storageId: string };
-          pendingUploads.set(img.file, json.storageId);
+          if (!upload.ok) throw new Error("Failed to upload image");
+          pendingUploads.set(img.file, publicUrl);
         }
       }
 
       const orderedImages = images.map((img) =>
         img.type === "existing"
           ? { type: "existing" as const, url: img.url }
-          : { type: "new" as const, storageId: pendingUploads.get(img.file)! }
+          : { type: "new" as const, url: pendingUploads.get(img.file)! }
       );
 
       if (initial) {
@@ -145,7 +149,7 @@ export function ProductForm({ initial }: { initial?: AdminProduct }) {
           name: value.name,
           description: value.description,
           priceInPence,
-          orderedImages: orderedImages as Array<{ type: "new"; storageId: string }>,
+          orderedImages: orderedImages as Array<{ type: "new"; url: string }>,
           featured: value.featured,
           displayOrder: 0,
           slug: value.slug || undefined,

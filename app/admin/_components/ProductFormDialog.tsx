@@ -1,7 +1,5 @@
 import { useRef, useState } from "react";
 import { useForm } from "@tanstack/react-form";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -48,8 +46,6 @@ export function ProductFormDialog({
   initial?: AdminProduct;
   onSuccess: () => void;
 }) {
-  const generateUploadUrl = useMutation(api.products.generateUploadUrl);
-
   // Images managed outside TanStack Form (file/blob values)
   const [existingImageUrls, setExistingImageUrls] = useState<string[]>(
     initial?.images ?? []
@@ -95,21 +91,28 @@ export function ProductFormDialog({
       const priceInPence = gbpToPence(value.priceGBP);
       if (!priceInPence) return;
 
-      const storageIds: string[] = [];
+      const newImageUrls: string[] = [];
       for (const { file } of pendingFiles) {
-        const uploadUrl = await generateUploadUrl();
-        const response = await fetch(uploadUrl, {
+        const res = await fetch("/api/r2/upload-url", {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fileName: file.name, contentType: file.type }),
+        });
+        if (!res.ok) throw new Error("Failed to get upload URL");
+        const { uploadUrl, publicUrl } = await res.json() as { uploadUrl: string; publicUrl: string };
+
+        const upload = await fetch(uploadUrl, {
+          method: "PUT",
           headers: { "Content-Type": file.type },
           body: file,
         });
-        const json = (await response.json()) as { storageId: string };
-        storageIds.push(json.storageId);
+        if (!upload.ok) throw new Error("Failed to upload image");
+        newImageUrls.push(publicUrl);
       }
 
-      const newImageEntries = storageIds.map((storageId) => ({
+      const newImageEntries = newImageUrls.map((url) => ({
         type: "new" as const,
-        storageId,
+        url,
       }));
       const existingEntries = existingImageUrls.map((url) => ({
         type: "existing" as const,

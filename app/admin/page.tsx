@@ -49,6 +49,8 @@ import type { AdminProduct } from "@/app/admin/productActions";
 import type { Collection, LinkItem } from "@/app/admin/_components/types";
 import { migrateCollectionsToR2 } from "@/app/admin/migrateCollectionsToR2";
 import type { MigrationResult } from "@/app/admin/migrateCollectionsToR2";
+import { migrateProductsToR2 } from "@/app/admin/migrateProductsToR2";
+import type { MigrationResult as ProductMigrationResult } from "@/app/admin/migrateProductsToR2";
 
 function PageContent() {
   const searchParams = useSearchParams();
@@ -76,6 +78,8 @@ function PageContent() {
   const [deletingCollection, setDeletingCollection] = useState<Collection | null>(null);
   const [migrating, setMigrating] = useState(false);
   const [migrationResult, setMigrationResult] = useState<MigrationResult | null>(null);
+  const [migratingProducts, setMigratingProducts] = useState(false);
+  const [productMigrationResult, setProductMigrationResult] = useState<ProductMigrationResult | null>(null);
   const [linkDialog, setLinkDialog] = useState<{ open: boolean; item?: LinkItem }>({
     open: false,
   });
@@ -330,6 +334,23 @@ function PageContent() {
             <h2 className="text-foreground text-lg font-semibold">Products</h2>
             <div className="flex items-center gap-2">
               <Button
+                size="sm"
+                variant="outline"
+                disabled={migratingProducts}
+                onClick={async () => {
+                  setMigratingProducts(true);
+                  setProductMigrationResult(null);
+                  try {
+                    const result = await migrateProductsToR2();
+                    setProductMigrationResult(result);
+                  } finally {
+                    setMigratingProducts(false);
+                  }
+                }}
+              >
+                {migratingProducts ? "Migrating…" : "Migrate to R2"}
+              </Button>
+              <Button
                 size="icon-sm"
                 variant="ghost"
                 onClick={() => void loadProducts()}
@@ -344,6 +365,21 @@ function PageContent() {
               </Button>
             </div>
           </div>
+
+          {productMigrationResult && (
+            <div className="mb-4 rounded-lg border border-border bg-muted/50 p-3 text-sm">
+              <p className="font-medium">Migration complete</p>
+              <p className="text-muted-foreground">
+                {productMigrationResult.migrated} migrated · {productMigrationResult.skipped} already on R2
+                {productMigrationResult.errors.length > 0 && (
+                  <span className="text-destructive"> · {productMigrationResult.errors.length} errors</span>
+                )}
+              </p>
+              {productMigrationResult.errors.map((e, i) => (
+                <p key={i} className="mt-1 text-xs text-destructive">{e}</p>
+              ))}
+            </div>
+          )}
 
           {productsLoading && products === undefined ? (
             <div className="flex flex-col gap-3">
